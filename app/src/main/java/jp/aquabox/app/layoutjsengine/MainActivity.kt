@@ -2,13 +2,20 @@ package jp.aquabox.app.layoutjsengine
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
 import jp.aquabox.app.layoutjsengine.view.TouchEventListener
 import jp.aquabox.app.layoutjsengine.view.ViewRender
 import jp.aquagear.layout.compiler.Compiler
 import jp.aquagear.layout.compiler.render.compiler.Render
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), TouchEventListener {
+class MainActivity : AppCompatActivity(), TouchEventListener, JSEngineInterface {
+    val jsEngine: JSEngine by lazy { JSEngine(this) }
+
+    override fun getEngine(): JSEngine {
+        return jsEngine
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

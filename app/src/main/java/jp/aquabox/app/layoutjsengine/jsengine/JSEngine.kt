@@ -3,8 +3,11 @@ package jp.aquabox.app.layoutjsengine.jsengine
 import android.content.Context
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import jp.aquabox.app.layoutjsengine.jsengine.data.JSData
 
 class JSEngine(context: Context?) : WebView(context) {
+    val jsData: JSData = JSData()
+
     init {
         webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {

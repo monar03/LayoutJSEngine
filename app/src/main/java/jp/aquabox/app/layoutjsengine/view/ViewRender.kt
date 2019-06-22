@@ -39,8 +39,8 @@ class ViewRender : BlockRender() {
     }
 
     private fun LinearLayout.setBlockDesign() {
-        params["orientation"]?.let {
-            when (it.value) {
+        styles["orientation"]?.let {
+            when (it) {
                 "horizon" -> {
                     orientation = LinearLayout.HORIZONTAL
                 }
@@ -53,12 +53,12 @@ class ViewRender : BlockRender() {
 
     private fun TextView.setTextViewDesign(str: String) {
         text = str
-        params["padding"]?.let {
+        styles["padding"]?.let {
             setPadding(
-                it.value.toInt(),
-                it.value.toInt(),
-                it.value.toInt(),
-                it.value.toInt()
+                it.toInt(),
+                it.toInt(),
+                it.toInt(),
+                it.toInt()
             )
         }
     }
