@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity(), TouchEventListener, JSEngineInterface 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        jsEngine.loadHtml()
         val renders: List<Render>? = Compiler(".test { padding:10;}\n .box { orientation : vertical;}")
             .compile(
                 "<view tap=\"test\" class=\"box\"><view class=\"test\">test</view><view>test1</view></view>",

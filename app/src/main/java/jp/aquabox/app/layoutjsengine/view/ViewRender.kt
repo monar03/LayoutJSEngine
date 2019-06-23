@@ -4,9 +4,13 @@ import android.content.Context
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import jp.aquabox.app.layoutjsengine.JSEngineInterface
+import jp.aquabox.app.layoutjsengine.jsengine.data.DataListener
 import jp.aquagear.layout.compiler.render.compiler.BlockRender
 import jp.aquagear.layout.compiler.render.compiler.Render
 import jp.aquagear.layout.compiler.render.compiler.StringRender
+import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
+import jp.aquagear.layout.compiler.render.lexer.result.Type
 
 class ViewRender : BlockRender() {
     fun render(context: Context): Any {
@@ -19,7 +23,7 @@ class ViewRender : BlockRender() {
                 is StringRender -> {
                     return TextView(context).apply {
                         setEvent(this, context)
-                        setTextViewDesign(render.render() as String)
+                        setTextViewDesign(render.render() as StringVariable.Parameter)
                     }
                 }
             }
@@ -51,8 +55,25 @@ class ViewRender : BlockRender() {
         }
     }
 
-    private fun TextView.setTextViewDesign(str: String) {
-        text = str
+    private fun TextView.setTextViewDesign(parameter: StringVariable.Parameter) {
+        when (parameter.type) {
+            Type.CONST -> {
+                text = parameter.value
+            }
+            Type.VARIABLE -> {
+                if (context is JSEngineInterface) {
+                    (context as JSEngineInterface).getEngine().jsData.addListener(
+                        parameter.value,
+                        object : DataListener {
+                            override fun onUpdate(data: Any?) {
+                                this@setTextViewDesign.text = data as String
+                            }
+                        }
+                    )
+                }
+            }
+        }
+
         styles["padding"]?.let {
             setPadding(
                 it.toInt(),

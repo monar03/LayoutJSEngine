@@ -4,6 +4,9 @@ import android.content.Context
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import jp.aquabox.app.layoutjsengine.jsengine.data.JSData
+import java.io.IOException
+import java.io.InputStream
+
 
 class JSEngine(context: Context?) : WebView(context) {
     val jsData: JSData = JSData()
@@ -12,8 +15,37 @@ class JSEngine(context: Context?) : WebView(context) {
         webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                loadEnd()
+                if (view != null) {
+                    injectScriptFile(view, "data.js")
+                }
+                loadData()
             }
+
+            private fun injectScriptFile(view: WebView, scriptFile: String) {
+                val input: InputStream
+                try {
+                    input = this@JSEngine.context.assets.open(scriptFile)
+                    val buffer = ByteArray(input.available())
+                    input.read(buffer)
+                    input.close()
+var s : String = String(buffer, Charsets.UTF_8)
+                    view.loadUrl(
+                        "javascript:(function() {" +
+                                "var parent = document.getElementsByTagName('head').item(0);" +
+                                "var script = document.createElement('script');" +
+                                "script.type = 'text/javascript';" +
+                                // Tell the browser to BASE64-decode the string into your script !!!
+                                "script.innerHTML = '" + String(buffer, Charsets.UTF_8) + "';" +
+                                "parent.appendChild(script);" +
+                                "})()"
+                    )
+                } catch (e: IOException) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace()
+                }
+
+            }
+
         }
         settings.run {
             this.javaScriptEnabled = true
@@ -22,7 +54,13 @@ class JSEngine(context: Context?) : WebView(context) {
         addJavascriptInterface(JsInterface(context!!), "aquagear")
     }
 
-    fun loadJS(js: String) {
+
+    fun loadHtml() {
+        loadUrl("file:///android_asset/index.html")
+    }
+
+    fun loadData() {
+        loadUrl("javascript:aquagear.loadData(document.documentElement.outerHTML);")
     }
 
     fun onLaunch() {
@@ -39,9 +77,5 @@ class JSEngine(context: Context?) : WebView(context) {
 
     fun onError() {
         loadUrl("javascript:App.onError()")
-    }
-
-    private fun loadEnd() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
