@@ -16,7 +16,7 @@ class JSEngine(context: Context?) : WebView(context) {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 if (view != null) {
-                    injectScriptFile(view, "data.js")
+                    //  injectScriptFile(view, "data.js")
                 }
                 loadData()
             }
@@ -28,7 +28,6 @@ class JSEngine(context: Context?) : WebView(context) {
                     val buffer = ByteArray(input.available())
                     input.read(buffer)
                     input.close()
-var s : String = String(buffer, Charsets.UTF_8)
                     view.loadUrl(
                         "javascript:(function() {" +
                                 "var parent = document.getElementsByTagName('head').item(0);" +
@@ -60,7 +59,7 @@ var s : String = String(buffer, Charsets.UTF_8)
     }
 
     fun loadData() {
-        loadUrl("javascript:aquagear.loadData(document.documentElement.outerHTML);")
+        loadUrl("javascript:aquagear.loadData(JSON.stringify(page));")
     }
 
     fun onLaunch() {
