@@ -1,8 +1,9 @@
 package jp.aquabox.app.layoutjsengine.jsengine
 
 import android.content.Context
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.util.Log
+import android.webkit.*
+import jp.aquabox.app.layoutjsengine.JSEngineInterface
 import jp.aquabox.app.layoutjsengine.jsengine.data.JSData
 import java.io.IOException
 import java.io.InputStream
@@ -15,36 +16,21 @@ class JSEngine(context: Context?) : WebView(context) {
         webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                if (view != null) {
-                    //  injectScriptFile(view, "data.js")
+                if (context is JSEngineInterface) {
+                    context.onPageFinished()
                 }
-                loadData()
+            }
+        }
+        webChromeClient = object : WebChromeClient() {
+            override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
+                Log.d("webview", consoleMessage?.message())
+                return super.onConsoleMessage(consoleMessage)
             }
 
-            private fun injectScriptFile(view: WebView, scriptFile: String) {
-                val input: InputStream
-                try {
-                    input = this@JSEngine.context.assets.open(scriptFile)
-                    val buffer = ByteArray(input.available())
-                    input.read(buffer)
-                    input.close()
-                    view.loadUrl(
-                        "javascript:(function() {" +
-                                "var parent = document.getElementsByTagName('head').item(0);" +
-                                "var script = document.createElement('script');" +
-                                "script.type = 'text/javascript';" +
-                                // Tell the browser to BASE64-decode the string into your script !!!
-                                "script.innerHTML = '" + String(buffer, Charsets.UTF_8) + "';" +
-                                "parent.appendChild(script);" +
-                                "})()"
-                    )
-                } catch (e: IOException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                }
-
+            override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                Log.d("webview", message)
+                return super.onJsAlert(view, url, message, result)
             }
-
         }
         settings.run {
             this.javaScriptEnabled = true
@@ -53,13 +39,39 @@ class JSEngine(context: Context?) : WebView(context) {
         addJavascriptInterface(JsInterface(context!!), "aquagear")
     }
 
+    fun loadJS(scriptFile: String) {
+        val input: InputStream
+        try {
+            input = this@JSEngine.context.assets.open(scriptFile)
+            val buffer = ByteArray(input.available())
+            input.read(buffer)
+            input.close()
 
-    fun loadHtml() {
-        loadUrl("file:///android_asset/index.html")
+            val html = "<html>\n" +
+                    "<head>\n" +
+                    "    <script type=\"text/javascript\" src=\"Page.js\">\n" +
+                    "        \n page = new " + String(buffer, Charsets.UTF_8) +
+                    "    </script>\n" +
+                    "</head>\n" +
+                    "</html>"
+            loadDataWithBaseURL(
+                "file:///android_asset",
+                html,
+                "text/html",
+                "UTF-0",
+                null
+            )
+        } catch (e: IOException) {
+            // TODO Auto-generated catch block
+            e.printStackTrace()
+        }
+
     }
 
-    fun loadData() {
-        loadUrl("javascript:aquagear.loadData(JSON.stringify(page));")
+    fun update(key: String) {
+        evaluateJavascript("javascript:page.getData('$key');") {
+            jsData.update(key, it)
+        }
     }
 
     fun onLaunch() {

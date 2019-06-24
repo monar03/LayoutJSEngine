@@ -62,14 +62,17 @@ class ViewRender : BlockRender() {
             }
             Type.VARIABLE -> {
                 if (context is JSEngineInterface) {
-                    (context as JSEngineInterface).getEngine().jsData.addListener(
-                        parameter.value,
-                        object : DataListener {
-                            override fun onUpdate(data: Any?) {
-                                this@setTextViewDesign.text = data as String
+                    (context as JSEngineInterface).getEngine().run {
+                        jsData.addListener(
+                            parameter.value,
+                            object : DataListener {
+                                override fun onUpdate(data: Any?) {
+                                    this@setTextViewDesign.text = data as String
+                                }
                             }
-                        }
-                    )
+                        )
+                        update(parameter.value)
+                    }
                 }
             }
         }

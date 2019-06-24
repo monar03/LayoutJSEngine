@@ -16,14 +16,10 @@ class MainActivity : AppCompatActivity(), TouchEventListener, JSEngineInterface 
         return jsEngine
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        jsEngine.loadHtml()
+    override fun onPageFinished() {
         val renders: List<Render>? = Compiler(".test { padding:10;}\n .box { orientation : vertical;}")
             .compile(
-                "<view tap=\"test\" class=\"box\"><view class=\"test\">test</view><view>test1</view></view>",
+                "<view tap=\"test\" class=\"box\"><view class=\"test\">{{test}}</view><view>test1</view></view>",
                 mapOf("view" to ViewRender::class.java)
             )
 
@@ -37,6 +33,13 @@ class MainActivity : AppCompatActivity(), TouchEventListener, JSEngineInterface 
                 }
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        jsEngine.loadJS("data.js")
     }
 
     override fun onTap(viewRender: ViewRender) {

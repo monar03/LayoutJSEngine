@@ -4,11 +4,8 @@ class JSData {
     private lateinit var dataMap: Map<String, Any>
     private val listenerMap: MutableMap<String, DataListener> = mutableMapOf()
 
-    fun update(dataMap: Map<String, Any>) {
-        this.dataMap = dataMap
-        listenerMap.map {
-            it.value.onUpdate(dataMap[it.key])
-        }
+    fun update(key: String, data: Any) {
+        listenerMap[key]?.onUpdate(data)
     }
 
     fun addListener(key: String, listener: DataListener) {

@@ -1,5 +1,5 @@
-var page = {
+Page({
   data: {
-    motto: 'Hello World'
+    test: 'Hello World'
   },
-};
+});
