@@ -13,6 +13,7 @@ class JSEngine(context: Context?) : WebView(context) {
     val jsData: JSData = JSData()
 
     init {
+
         webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
@@ -40,16 +41,21 @@ class JSEngine(context: Context?) : WebView(context) {
     }
 
     fun loadJS(scriptFile: String) {
-        val input: InputStream
         try {
-            input = this@JSEngine.context.assets.open(scriptFile)
+            val input: InputStream = this@JSEngine.context.assets.open(scriptFile)
             val buffer = ByteArray(input.available())
             input.read(buffer)
             input.close()
 
+            val input1 = this@JSEngine.context.assets.open("Page.js")
+            val buffer1 = ByteArray(input1.available())
+            input1.read(buffer1)
+            input1.close()
+
             val html = "<html>\n" +
                     "<head>\n" +
-                    "    <script type=\"text/javascript\" src=\"Page.js\">\n" +
+                    "    <script>\n" +
+                    "        \n" + String(buffer1, Charsets.UTF_8) +
                     "        \n page = new " + String(buffer, Charsets.UTF_8) +
                     "    </script>\n" +
                     "</head>\n" +
@@ -69,9 +75,13 @@ class JSEngine(context: Context?) : WebView(context) {
     }
 
     fun update(key: String) {
-        evaluateJavascript("javascript:page.getData('$key');") {
+        evaluateJavascript("javascript:page.getData('$key')") {
             jsData.update(key, it)
         }
+    }
+
+    fun tap(funcName: String) {
+        evaluateJavascript("javascript:page.onTap('$funcName')", null)
     }
 
     fun onLaunch() {

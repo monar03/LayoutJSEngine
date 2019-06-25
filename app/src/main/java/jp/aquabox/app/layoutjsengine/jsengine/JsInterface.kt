@@ -1,12 +1,13 @@
 package jp.aquabox.app.layoutjsengine.jsengine
 
 import android.content.Context
-import android.util.Log
+import android.os.Handler
 import android.webkit.JavascriptInterface
 import android.widget.Toast
 import jp.aquabox.app.layoutjsengine.JSEngineInterface
 
 class JsInterface(private val context: Context) {
+    val hanlder: Handler = Handler()
 
     @JavascriptInterface
     fun request(url: String) {
@@ -20,10 +21,11 @@ class JsInterface(private val context: Context) {
 
     @JavascriptInterface
     fun update(key: String) {
-        if (context is JSEngineInterface) {
-            context.getEngine().update(key)
+        hanlder.post {
+            if (context is JSEngineInterface) {
+                context.getEngine().update(key)
+            }
         }
-        Log.d("aaa", "aaaa")
     }
 
 }

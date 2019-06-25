@@ -1,14 +1,18 @@
 class Page {
-    constructor(data) {
-        this.prototype = data;
+    constructor(obj) {
+        this.obj = obj
     }
 
     setData(key, data) {
-        this.data[key] = data;
-        aquagear.update()
+        this.obj.data[key] = data
+        aquagear.update(key)
     }
 
     getData(key) {
-        return this.data[key];
+        return this.obj.data[key]
+    }
+
+    onTap(funcName) {
+        this.obj[funcName]()
     }
 }

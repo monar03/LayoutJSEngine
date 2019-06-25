@@ -36,8 +36,10 @@ class ViewRender : BlockRender() {
 
     private fun setEvent(view: View, context: Context) {
         params["tap"]?.let {
-            if (context is TouchEventListener) {
-                view.setOnClickListener { context.onTap(this) }
+            if (context is JSEngineInterface) {
+                view.setOnClickListener { _ ->
+                    context.getEngine().tap(it.value)
+                }
             }
         }
     }
@@ -86,9 +88,5 @@ class ViewRender : BlockRender() {
             )
         }
     }
-}
-
-interface TouchEventListener {
-    fun onTap(viewRender: ViewRender)
 }
 
