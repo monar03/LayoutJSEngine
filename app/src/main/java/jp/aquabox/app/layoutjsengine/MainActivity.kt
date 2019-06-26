@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(), JSEngineInterface {
     }
 
     override fun onPageFinished() {
-        val layoutStr = "<view class=\"box\">" +
+        val layoutStr = "<view for=\"{{list}}\" class=\"box\">" +
                 "<view tap=\"tap\" class=\"test\">{{test}}</view>" +
                 "<view tap=\"tap1\">{{test1}}</view>" +
                 "<text>{{test2}}</text>" +

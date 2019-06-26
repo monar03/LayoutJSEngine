@@ -11,7 +11,14 @@ import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 
 class ViewRender : BlockRender() {
     fun render(context: Context): Any {
-        val block = AquagearViewLayout(context)
+        val block = AquagearViewLayout(context).apply {
+            set(params, styles)
+            if (params.containsKey("for")) {
+                setTemplateRender(renders)
+                return this
+            }
+        }
+
         for (render: Render in renders) {
             when (render) {
                 is ViewRender -> {
@@ -27,9 +34,8 @@ class ViewRender : BlockRender() {
                 }
             }
         }
-        return block.apply {
-            set(params, styles)
-        }
+
+        return block
     }
 }
 

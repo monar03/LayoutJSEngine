@@ -1,20 +1,28 @@
 package jp.aquabox.app.layoutjsengine.jsengine.data
 
-class JSData {
-    private lateinit var dataMap: Map<String, Any>
-    private val listenerMap: MutableMap<String, DataListener> = mutableMapOf()
+import org.json.JSONObject
 
-    fun update(key: String, data: Any) {
-        listenerMap[key]?.onUpdate(data)
+class JSData {
+    private lateinit var dataMap: Map<String, JSONObject>
+    private val listenerMap: MutableMap<String, MutableList<DataListener>> = mutableMapOf()
+
+    fun update(key: String, data: JSONObject) {
+        listenerMap[key]?.map {
+            it.onUpdate(data)
+        }
     }
 
     fun addListener(key: String, listener: DataListener) {
-        listenerMap[key] = listener
+        if (listenerMap.containsKey(key)) {
+            listenerMap[key]?.add(listener)
+        } else {
+            listenerMap[key] = mutableListOf(listener)
+        }
     }
 
 
 }
 
 interface DataListener {
-    fun onUpdate(data: Any?)
+    fun onUpdate(data: JSONObject)
 }

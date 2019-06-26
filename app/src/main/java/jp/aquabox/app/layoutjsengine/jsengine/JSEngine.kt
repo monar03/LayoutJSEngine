@@ -1,12 +1,15 @@
 package jp.aquabox.app.layoutjsengine.jsengine
 
 import android.content.Context
+import android.util.JsonReader
 import android.util.Log
 import android.webkit.*
 import jp.aquabox.app.layoutjsengine.JSEngineInterface
 import jp.aquabox.app.layoutjsengine.jsengine.data.JSData
+import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
+import java.io.StringReader
 
 
 class JSEngine(context: Context?) : WebView(context) {
@@ -76,7 +79,12 @@ class JSEngine(context: Context?) : WebView(context) {
 
     fun update(key: String) {
         evaluateJavascript("javascript:page.getData('$key')") {
-            jsData.update(key, it)
+            it?.run {
+                // XXX 変なエスケープ文字列をサニタイズする
+                val reader = JsonReader(StringReader(this))
+                reader.isLenient = true
+                jsData.update(key, JSONObject(reader.nextString()))
+            }
         }
     }
 

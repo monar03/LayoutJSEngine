@@ -9,7 +9,9 @@ class Page {
     }
 
     getData(key) {
-        return this.obj.data[key]
+        var ret = {}
+        ret[key] = this.obj.data[key]
+        return JSON.stringify(ret)
     }
 
     onTap(funcName) {

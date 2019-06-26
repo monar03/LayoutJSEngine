@@ -6,6 +6,7 @@ import jp.aquabox.app.layoutjsengine.JSEngineInterface
 import jp.aquabox.app.layoutjsengine.jsengine.data.DataListener
 import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 import jp.aquagear.layout.compiler.render.lexer.result.Type
+import org.json.JSONObject
 
 class AquagearTextView(context: Context?) : TextView(context) {
     private lateinit var textParam: StringVariable.Parameter
@@ -47,8 +48,8 @@ class AquagearTextView(context: Context?) : TextView(context) {
                         jsData.addListener(
                             textParam.value,
                             object : DataListener {
-                                override fun onUpdate(data: Any?) {
-                                    text = data as String
+                                override fun onUpdate(data: JSONObject) {
+                                    text = data.getString(textParam.value)
                                 }
                             }
                         )
