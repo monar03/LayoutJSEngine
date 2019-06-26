@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
-import jp.aquabox.app.layoutjsengine.view.TextRender
-import jp.aquabox.app.layoutjsengine.view.ViewRender
+import jp.aquabox.app.layoutjsengine.render.TextRender
+import jp.aquabox.app.layoutjsengine.render.ViewRender
 import jp.aquagear.layout.compiler.Compiler
 import jp.aquagear.layout.compiler.render.compiler.Render
 import kotlinx.android.synthetic.main.activity_main.*

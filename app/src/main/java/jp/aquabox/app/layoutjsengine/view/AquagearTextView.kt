@@ -1,51 +1,58 @@
 package jp.aquabox.app.layoutjsengine.view
 
 import android.content.Context
-import android.view.View
 import android.widget.TextView
 import jp.aquabox.app.layoutjsengine.JSEngineInterface
 import jp.aquabox.app.layoutjsengine.jsengine.data.DataListener
-import jp.aquagear.layout.compiler.render.compiler.BlockRender
-import jp.aquagear.layout.compiler.render.compiler.StringRender
 import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 import jp.aquagear.layout.compiler.render.lexer.result.Type
 
-class TextRender : BlockRender() {
-    fun render(context: Context): TextView {
-        return TextView(context).apply {
-            setEvent(this, context)
-            setTextViewDesign((renders.get(0) as StringRender).render() as StringVariable.Parameter)
-        }
+class AquagearTextView(context: Context?) : TextView(context) {
+    private lateinit var textParam: StringVariable.Parameter
+    private lateinit var params: Map<String, StringVariable.Parameter>
+    private lateinit var styles: Map<String, String>
+
+    fun set(
+        textParam: StringVariable.Parameter,
+        params: Map<String, StringVariable.Parameter>,
+        styles: Map<String, String>
+    ) {
+        this.textParam = textParam
+        this.params = params
+        this.styles = styles
+
+        setEvent()
+        setTextViewDesign()
     }
 
     // TODO ViewRenderも含め設定の所は最適化する
-    private fun setEvent(view: View, context: Context) {
+    private fun setEvent() {
         params["tap"]?.let {
             if (context is JSEngineInterface) {
-                view.setOnClickListener { _ ->
-                    context.getEngine().tap(it.value)
+                setOnClickListener { _ ->
+                    (this.context as JSEngineInterface).getEngine().tap(it.value)
                 }
             }
         }
     }
 
-    private fun TextView.setTextViewDesign(parameter: StringVariable.Parameter) {
-        when (parameter.type) {
+    private fun setTextViewDesign() {
+        when (textParam.type) {
             Type.CONST -> {
-                text = parameter.value
+                text = textParam.value
             }
             Type.VARIABLE -> {
-                if (context is JSEngineInterface) {
+                if (this.context is JSEngineInterface) {
                     (context as JSEngineInterface).getEngine().run {
                         jsData.addListener(
-                            parameter.value,
+                            textParam.value,
                             object : DataListener {
                                 override fun onUpdate(data: Any?) {
-                                    this@setTextViewDesign.text = data as String
+                                    text = data as String
                                 }
                             }
                         )
-                        update(parameter.value)
+                        update(textParam.value)
                     }
                 }
             }
