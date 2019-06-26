@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
+import jp.aquabox.app.layoutjsengine.view.TextRender
 import jp.aquabox.app.layoutjsengine.view.ViewRender
 import jp.aquagear.layout.compiler.Compiler
 import jp.aquagear.layout.compiler.render.compiler.Render
@@ -20,12 +21,16 @@ class MainActivity : AppCompatActivity(), JSEngineInterface {
         val layoutStr = "<view class=\"box\">" +
                 "<view tap=\"tap\" class=\"test\">{{test}}</view>" +
                 "<view tap=\"tap1\">{{test1}}</view>" +
+                "<text>{{test2}}</text>" +
                 "</view>"
 
         val renders: List<Render>? = Compiler(".test { padding:10;}\n .box { orientation : vertical;}")
             .compile(
                 layoutStr,
-                mapOf("view" to ViewRender::class.java)
+                mapOf(
+                    "view" to ViewRender::class.java,
+                    "text" to TextRender::class.java
+                )
             )
 
         if (renders != null) {
