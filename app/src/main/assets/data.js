@@ -3,7 +3,7 @@ Page({
     test: 'Hello World',
     test1: 'Hello World12',
     test2: 'Hello World13',
-    list: [1,2,3]
+    list: [{},{},{}]
   },
   tap: function() {
     page.setData('test', 'aaaaaaaa')

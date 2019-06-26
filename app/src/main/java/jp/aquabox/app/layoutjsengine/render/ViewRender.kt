@@ -8,9 +8,10 @@ import jp.aquagear.layout.compiler.render.compiler.BlockRender
 import jp.aquagear.layout.compiler.render.compiler.Render
 import jp.aquagear.layout.compiler.render.compiler.StringRender
 import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
+import org.json.JSONObject
 
 class ViewRender : BlockRender() {
-    fun render(context: Context): Any {
+    fun render(context: Context, jsonObject: JSONObject?): Any {
         val block = AquagearViewLayout(context).apply {
             set(params, styles)
             if (params.containsKey("for")) {
@@ -22,7 +23,7 @@ class ViewRender : BlockRender() {
         for (render: Render in renders) {
             when (render) {
                 is ViewRender -> {
-                    block.addView(render.render(context) as View?)
+                    block.addView(render.render(context, null) as View?)
                 }
                 is StringRender -> {
                     block.addView(AquagearTextView(context).apply {
@@ -30,7 +31,7 @@ class ViewRender : BlockRender() {
                     })
                 }
                 is TextRender -> {
-                    block.addView(render.render(context) as View?)
+                    block.addView(render.render(context, null))
                 }
             }
         }

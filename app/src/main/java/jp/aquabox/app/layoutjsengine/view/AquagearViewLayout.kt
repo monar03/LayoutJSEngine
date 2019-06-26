@@ -47,15 +47,16 @@ class AquagearViewLayout(context: Context?) : LinearLayout(context) {
                                 it.value,
                                 object : DataListener {
                                     override fun onUpdate(data: JSONObject) {
-                                        for (i in 0..data.getJSONArray(it.value).length()) {
+                                        val jsons = data.getJSONArray(it.value)
+                                        for (i in 0 until jsons.length()) {
                                             templateRenders?.map { render ->
                                                 when (render) {
                                                     is ViewRender -> {
-                                                        val v = render.render(context) as View
+                                                        val v = render.render(context, jsons.getJSONObject(i)) as View
                                                         this@AquagearViewLayout.addView(v)
                                                     }
                                                     is TextRender -> {
-                                                        val v = render.render(context) as View
+                                                        val v = render.render(context, jsons.getJSONObject(i)) as View
                                                         this@AquagearViewLayout.addView(v)
                                                     }
 

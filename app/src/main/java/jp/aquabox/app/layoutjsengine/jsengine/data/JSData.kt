@@ -3,7 +3,6 @@ package jp.aquabox.app.layoutjsengine.jsengine.data
 import org.json.JSONObject
 
 class JSData {
-    private lateinit var dataMap: Map<String, JSONObject>
     private val listenerMap: MutableMap<String, MutableList<DataListener>> = mutableMapOf()
 
     fun update(key: String, data: JSONObject) {

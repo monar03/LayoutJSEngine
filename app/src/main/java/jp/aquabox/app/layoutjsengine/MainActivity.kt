@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), JSEngineInterface {
         if (renders != null) {
             for (render: Render in renders) {
                 if (render is ViewRender) {
-                    val o = render.render(this)
+                    val o = render.render(this, null)
                     if (o is android.view.View) {
                         root.apply {
                             this.addView(o as android.view.View?)
