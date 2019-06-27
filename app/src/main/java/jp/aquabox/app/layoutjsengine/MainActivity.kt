@@ -8,21 +8,23 @@ import jp.aquabox.app.layoutjsengine.render.ViewRender
 import jp.aquagear.layout.compiler.Compiler
 import jp.aquagear.layout.compiler.render.compiler.Render
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.InputStream
 
 class MainActivity : AppCompatActivity(), JSEngineInterface {
     val jsEngine: JSEngine by lazy { JSEngine(this) }
+    val param_url = "url"
 
     override fun getEngine(): JSEngine {
         return jsEngine
     }
 
     override fun onPageFinished() {
-        val layoutStr = "<view for=\"{{list}}\" class=\"box\">" +
-                "<view tap=\"tap\" class=\"test\">{{test}}</view>" +
-                "<view tap=\"tap1\">{{test1}}</view>" +
-                "<text>{{test2}}</text>" +
-                "</view>"
-        val designStr = ".test { padding:10;}\n .box { orientation : vertical;}"
+        val layoutStr = loadFile(intent.getStringExtra(param_url)?.let {
+            "$it.vxml"
+        } ?: "index/index.vxml")
+        val designStr = loadFile(intent.getStringExtra(param_url)?.let {
+            "$it.vcss"
+        } ?: "index/index.vcss")
         val renders: List<Render>? = Compiler(
             mapOf(
                 "view" to ViewRender::class.java,
@@ -51,8 +53,21 @@ class MainActivity : AppCompatActivity(), JSEngineInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        jsEngine.loadJS("data.js")
+        jsEngine.loadJS(intent.getStringExtra(param_url)?.let {
+            "$it.js"
+        } ?: "index/index.js")
     }
+
+    private fun loadFile(scriptFile: String): String {
+        val input: InputStream = assets.open(scriptFile)
+        val buffer = ByteArray(input.available())
+        input.read(buffer)
+        input.close()
+
+        return String(buffer, Charsets.UTF_8)
+    }
+
+
 }
 
 

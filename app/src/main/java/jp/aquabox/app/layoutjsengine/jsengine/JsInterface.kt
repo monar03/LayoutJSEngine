@@ -20,7 +20,9 @@ class JsInterface(private val context: Context) {
     @JavascriptInterface
     fun navigateTo(uri: String) {
         context.startActivity(
-            Intent(context, MainActivity::class.java)
+            Intent(context, MainActivity::class.java).apply {
+                putExtra("url", uri)
+            }
         )
     }
 

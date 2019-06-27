@@ -18,7 +18,7 @@ Page({
         }]
   },
   tap: function(data) {
-    aquagear.navigateTo('/test')
+    aquagear.navigateTo('hoge/index')
   },
   tap1: function() {
     aquagear.showToast('test')
