@@ -2,7 +2,6 @@ package jp.aquabox.app.layoutjsengine
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.TextView
 import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
 import jp.aquabox.app.layoutjsengine.render.TextRender
 import jp.aquabox.app.layoutjsengine.render.ViewRender
@@ -23,15 +22,16 @@ class MainActivity : AppCompatActivity(), JSEngineInterface {
                 "<view tap=\"tap1\">{{test1}}</view>" +
                 "<text>{{test2}}</text>" +
                 "</view>"
-
-        val renders: List<Render>? = Compiler(".test { padding:10;}\n .box { orientation : vertical;}")
-            .compile(
-                layoutStr,
-                mapOf(
-                    "view" to ViewRender::class.java,
-                    "text" to TextRender::class.java
-                )
+        val designStr = ".test { padding:10;}\n .box { orientation : vertical;}"
+        val renders: List<Render>? = Compiler(
+            mapOf(
+                "view" to ViewRender::class.java,
+                "text" to TextRender::class.java
             )
+        ).compile(
+            layoutStr,
+            designStr
+        )
 
         if (renders != null) {
             for (render: Render in renders) {
@@ -45,10 +45,6 @@ class MainActivity : AppCompatActivity(), JSEngineInterface {
                 }
             }
         }
-
-        root.addView(TextView(this).apply {
-            this.text = layoutStr
-        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,14 +1,37 @@
 Page({
   data: {
-    test: 'Hello World',
-    test1: 'Hello World12',
-    test2: 'Hello World13',
-    list: [{},{},{}]
+    list: [
+        {
+            test: 'Hello World1',
+            test1: 'Hello World2',
+            test2: 'Hello World3',
+        },
+        {
+            test: 'Hello World4',
+            test1: 'Hello World5',
+            test2: 'Hello World6',
+        },
+        {
+            test: 'Hello World7',
+            test1: 'Hello World8',
+            test2: 'Hello World9',
+        }]
   },
-  tap: function() {
-    page.setData('test', 'aaaaaaaa')
+  tap: function(data) {
+    aquagear.navigateTo('/test')
   },
   tap1: function() {
-    page.setData('test1', 'bbbbbbbb')
+    aquagear.showToast('test')
+    page.setData('list', [
+    {
+      test: 'Hello World1',
+      test1: 'Hello World2',
+      test2: 'Hello World3'
+    },
+    {
+      test: 'Hello World10',
+      test1: 'Hello World20',
+      test2: 'Hello World30'
+    }])
   }
 })

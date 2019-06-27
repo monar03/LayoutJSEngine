@@ -12,15 +12,19 @@ class AquagearTextView(context: Context?) : TextView(context) {
     private lateinit var textParam: StringVariable.Parameter
     private lateinit var params: Map<String, StringVariable.Parameter>
     private lateinit var styles: Map<String, String>
+    private var jsonObject: JSONObject? = null
+
 
     fun set(
         textParam: StringVariable.Parameter,
         params: Map<String, StringVariable.Parameter>,
-        styles: Map<String, String>
+        styles: Map<String, String>,
+        jsonObject: JSONObject?
     ) {
         this.textParam = textParam
         this.params = params
         this.styles = styles
+        this.jsonObject = jsonObject
 
         setEvent()
         setTextViewDesign()
@@ -31,7 +35,7 @@ class AquagearTextView(context: Context?) : TextView(context) {
         params["tap"]?.let {
             if (context is JSEngineInterface) {
                 setOnClickListener { _ ->
-                    (this.context as JSEngineInterface).getEngine().tap(it.value)
+                    (this.context as JSEngineInterface).getEngine().tap(it.value, jsonObject.toString())
                 }
             }
         }
@@ -43,7 +47,10 @@ class AquagearTextView(context: Context?) : TextView(context) {
                 text = textParam.value
             }
             Type.VARIABLE -> {
-                if (this.context is JSEngineInterface) {
+                if (jsonObject != null) {
+                    // TODO データがない時の処理の追加
+                    text = jsonObject!!.getString(textParam.value)
+                } else if (this.context is JSEngineInterface) {
                     (context as JSEngineInterface).getEngine().run {
                         jsData.addListener(
                             textParam.value,

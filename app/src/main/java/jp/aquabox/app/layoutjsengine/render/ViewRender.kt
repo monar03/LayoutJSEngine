@@ -13,7 +13,7 @@ import org.json.JSONObject
 class ViewRender : BlockRender() {
     fun render(context: Context, jsonObject: JSONObject?): Any {
         val block = AquagearViewLayout(context).apply {
-            set(params, styles)
+            set(params, styles, jsonObject)
             if (params.containsKey("for")) {
                 setTemplateRender(renders)
                 return this
@@ -23,15 +23,15 @@ class ViewRender : BlockRender() {
         for (render: Render in renders) {
             when (render) {
                 is ViewRender -> {
-                    block.addView(render.render(context, null) as View?)
+                    block.addView(render.render(context, jsonObject) as View?)
                 }
                 is StringRender -> {
                     block.addView(AquagearTextView(context).apply {
-                        set(render.render() as StringVariable.Parameter, mapOf(), mapOf())
+                        set(render.render() as StringVariable.Parameter, mapOf(), mapOf(), jsonObject)
                     })
                 }
                 is TextRender -> {
-                    block.addView(render.render(context, null))
+                    block.addView(render.render(context, jsonObject))
                 }
             }
         }

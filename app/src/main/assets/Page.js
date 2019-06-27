@@ -14,7 +14,7 @@ class Page {
         return JSON.stringify(ret)
     }
 
-    onTap(funcName) {
-        this.obj[funcName]()
+    onTap(funcName, data) {
+        this.obj[funcName](data)
     }
 }

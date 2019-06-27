@@ -11,7 +11,7 @@ import org.json.JSONObject
 class TextRender : BlockRender() {
     fun render(context: Context, jsonObject: JSONObject?): TextView {
         return AquagearTextView(context).apply {
-            set((renders.get(0) as StringRender).render() as StringVariable.Parameter, params, styles)
+            set((renders[0] as StringRender).render() as StringVariable.Parameter, params, styles, jsonObject)
         }
     }
 

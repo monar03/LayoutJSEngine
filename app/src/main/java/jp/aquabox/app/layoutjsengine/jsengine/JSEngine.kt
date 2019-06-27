@@ -88,8 +88,8 @@ class JSEngine(context: Context?) : WebView(context) {
         }
     }
 
-    fun tap(funcName: String) {
-        evaluateJavascript("javascript:page.onTap('$funcName')", null)
+    fun tap(funcName: String, jsonStr: String) {
+        evaluateJavascript("javascript:page.onTap('$funcName', $jsonStr)", null)
     }
 
     fun onLaunch() {
