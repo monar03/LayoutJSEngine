@@ -3,6 +3,7 @@ package jp.aquabox.app.layoutjsengine
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
+import jp.aquabox.app.layoutjsengine.render.ScrollViewRender
 import jp.aquabox.app.layoutjsengine.render.TextRender
 import jp.aquabox.app.layoutjsengine.render.ViewRender
 import jp.aquagear.layout.compiler.Compiler
@@ -28,7 +29,8 @@ class MainActivity : AppCompatActivity(), JSEngineInterface {
         val renders: List<Render>? = Compiler(
             mapOf(
                 "view" to ViewRender::class.java,
-                "text" to TextRender::class.java
+                "text" to TextRender::class.java,
+                "scroll-view" to ScrollViewRender::class.java
             )
         ).compile(
             layoutStr,
@@ -36,8 +38,16 @@ class MainActivity : AppCompatActivity(), JSEngineInterface {
         )
 
         if (renders != null) {
+            // TODO あとで継承で整理
             for (render: Render in renders) {
                 if (render is ViewRender) {
+                    val o = render.render(this, null)
+                    if (o is android.view.View) {
+                        root.apply {
+                            this.addView(o as android.view.View?)
+                        }
+                    }
+                } else if (render is ScrollViewRender) {
                     val o = render.render(this, null)
                     if (o is android.view.View) {
                         root.apply {

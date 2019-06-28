@@ -4,3 +4,6 @@
 .box {
     orientation : vertical;
 }
+.scroll {
+    height : 300;
+}
