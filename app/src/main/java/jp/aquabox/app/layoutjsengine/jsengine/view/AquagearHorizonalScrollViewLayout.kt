@@ -1,20 +1,19 @@
-package jp.aquabox.app.layoutjsengine.view
+package jp.aquabox.app.layoutjsengine.jsengine.view
 
 import android.content.Context
 import android.view.View
-import android.widget.LinearLayout
-import jp.aquabox.app.layoutjsengine.JSEngineInterface
+import android.view.ViewGroup
+import android.widget.ScrollView
 import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
 import jp.aquabox.app.layoutjsengine.jsengine.data.DataListener
-import jp.aquabox.app.layoutjsengine.render.ScrollViewRender
-import jp.aquabox.app.layoutjsengine.render.TextRender
-import jp.aquabox.app.layoutjsengine.render.ViewRender
+import jp.aquabox.app.layoutjsengine.jsengine.render.TextRender
+import jp.aquabox.app.layoutjsengine.jsengine.render.ViewRender
 import jp.aquagear.layout.compiler.render.compiler.Render
 import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 import jp.aquagear.layout.compiler.render.lexer.result.Type
 import org.json.JSONObject
 
-class AquagearViewLayout(context: Context?) : LinearLayout(context) {
+class AquagearHorizonalScrollViewLayout(context: Context) : ScrollView(context) {
     private var params: Map<String, StringVariable.Parameter>? = null
     private var styles: Map<String, String>? = null
     private var templateRenders: List<Render>? = null
@@ -39,9 +38,9 @@ class AquagearViewLayout(context: Context?) : LinearLayout(context) {
 
     private fun setEvent() {
         params?.get("tap")?.let {
-            if (context is JSEngineInterface) {
+            if (context is JSEngine.JSEngineInterface) {
                 setOnClickListener { _ ->
-                    (this.context as JSEngineInterface).getEngine().tap(it.value, jsonObject.toString())
+                    (this.context as JSEngine.JSEngineInterface).getEngine().tap(it.value, jsonObject.toString())
                 }
             }
         }
@@ -49,8 +48,8 @@ class AquagearViewLayout(context: Context?) : LinearLayout(context) {
         params?.get("for")?.let {
             when (it.type) {
                 Type.VARIABLE -> {
-                    if (this.context is JSEngineInterface) {
-                        (context as JSEngineInterface).getEngine().run {
+                    if (this.context is JSEngine.JSEngineInterface) {
+                        (context as JSEngine.JSEngineInterface).getEngine().run {
                             setDataListener(it)
                             update(it.value)
                         }
@@ -69,25 +68,20 @@ class AquagearViewLayout(context: Context?) : LinearLayout(context) {
             it.value,
             object : DataListener {
                 override fun onUpdate(data: JSONObject) {
-                    this@AquagearViewLayout.removeAllViews()
+                    this@AquagearHorizonalScrollViewLayout.removeAllViews()
                     val jsons = data.getJSONArray(it.value)
                     for (i in 0 until jsons.length()) {
                         templateRenders?.map { render ->
-                            var v: View? = null
                             when (render) {
                                 is ViewRender -> {
-                                    v = render.render(context, jsons.getJSONObject(i)) as View
+                                    val v = render.render(context, jsons.getJSONObject(i)) as View
+                                    this@AquagearHorizonalScrollViewLayout.addView(v)
                                 }
                                 is TextRender -> {
-                                    v = render.render(context, jsons.getJSONObject(i))
-                                }
-                                is ScrollViewRender -> {
-                                    v = render.render(context, jsons.getJSONObject(i)) as View
+                                    val v = render.render(context, jsons.getJSONObject(i)) as View
+                                    this@AquagearHorizonalScrollViewLayout.addView(v)
                                 }
 
-                            }
-                            if (v != null) {
-                                this@AquagearViewLayout.addView(v)
                             }
                         }
                     }
@@ -97,16 +91,6 @@ class AquagearViewLayout(context: Context?) : LinearLayout(context) {
     }
 
     private fun setBlockDesign() {
-        styles?.get("orientation")?.let {
-            when (it) {
-                "horizon" -> {
-                    orientation = HORIZONTAL
-                }
-                else -> {
-                    orientation = VERTICAL
-                }
-            }
-        }
         styles?.get("padding")?.let {
             setPadding(
                 it.toInt(),
@@ -115,5 +99,10 @@ class AquagearViewLayout(context: Context?) : LinearLayout(context) {
                 it.toInt()
             )
         }
+
+        val width = styles?.get("width")?.toInt() ?: ViewGroup.LayoutParams.WRAP_CONTENT
+        val height = styles?.get("height")?.toInt() ?: ViewGroup.LayoutParams.WRAP_CONTENT
+
+        layoutParams = ViewGroup.LayoutParams(width, height)
     }
 }

@@ -1,8 +1,8 @@
-package jp.aquabox.app.layoutjsengine.render
+package jp.aquabox.app.layoutjsengine.jsengine.render
 
 import android.content.Context
 import android.widget.TextView
-import jp.aquabox.app.layoutjsengine.view.AquagearTextView
+import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearTextView
 import jp.aquagear.layout.compiler.render.compiler.BlockRender
 import jp.aquagear.layout.compiler.render.compiler.StringRender
 import jp.aquagear.layout.compiler.render.lexer.result.StringVariable

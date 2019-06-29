@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Handler
 import android.webkit.JavascriptInterface
 import android.widget.Toast
-import jp.aquabox.app.layoutjsengine.JSEngineInterface
 import jp.aquabox.app.layoutjsengine.MainActivity
 
 class JsInterface(private val context: Context) {
@@ -41,7 +40,7 @@ class JsInterface(private val context: Context) {
     @JavascriptInterface
     fun update(key: String) {
         hanlder.post {
-            if (context is JSEngineInterface) {
+            if (context is JSEngine.JSEngineInterface) {
                 context.getEngine().update(key)
             }
         }

@@ -1,9 +1,9 @@
-package jp.aquabox.app.layoutjsengine.render
+package jp.aquabox.app.layoutjsengine.jsengine.render
 
 import android.content.Context
 import android.view.View
-import jp.aquabox.app.layoutjsengine.view.AquagearTextView
-import jp.aquabox.app.layoutjsengine.view.AquagearViewLayout
+import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearTextView
+import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearViewLayout
 import jp.aquagear.layout.compiler.render.compiler.BlockRender
 import jp.aquagear.layout.compiler.render.compiler.Render
 import jp.aquagear.layout.compiler.render.compiler.StringRender

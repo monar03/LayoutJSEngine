@@ -1,8 +1,8 @@
-package jp.aquabox.app.layoutjsengine.view
+package jp.aquabox.app.layoutjsengine.jsengine.view
 
 import android.content.Context
 import android.widget.TextView
-import jp.aquabox.app.layoutjsengine.JSEngineInterface
+import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
 import jp.aquabox.app.layoutjsengine.jsengine.data.DataListener
 import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 import jp.aquagear.layout.compiler.render.lexer.result.Type
@@ -33,9 +33,9 @@ class AquagearTextView(context: Context?) : TextView(context) {
     // TODO ViewRenderも含め設定の所は最適化する
     private fun setEvent() {
         params["tap"]?.let {
-            if (context is JSEngineInterface) {
+            if (context is JSEngine.JSEngineInterface) {
                 setOnClickListener { _ ->
-                    (this.context as JSEngineInterface).getEngine().tap(it.value, jsonObject.toString())
+                    (this.context as JSEngine.JSEngineInterface).getEngine().tap(it.value, jsonObject.toString())
                 }
             }
         }
@@ -50,8 +50,8 @@ class AquagearTextView(context: Context?) : TextView(context) {
                 if (jsonObject != null) {
                     // TODO データがない時の処理の追加
                     text = jsonObject!!.getString(textParam.value)
-                } else if (this.context is JSEngineInterface) {
-                    (context as JSEngineInterface).getEngine().run {
+                } else if (this.context is JSEngine.JSEngineInterface) {
+                    (context as JSEngine.JSEngineInterface).getEngine().run {
                         jsData.addListener(
                             textParam.value,
                             object : DataListener {

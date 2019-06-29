@@ -1,14 +1,13 @@
-package jp.aquabox.app.layoutjsengine.view
+package jp.aquabox.app.layoutjsengine.jsengine.view
 
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
-import jp.aquabox.app.layoutjsengine.JSEngineInterface
 import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
 import jp.aquabox.app.layoutjsengine.jsengine.data.DataListener
-import jp.aquabox.app.layoutjsengine.render.TextRender
-import jp.aquabox.app.layoutjsengine.render.ViewRender
+import jp.aquabox.app.layoutjsengine.jsengine.render.TextRender
+import jp.aquabox.app.layoutjsengine.jsengine.render.ViewRender
 import jp.aquagear.layout.compiler.render.compiler.Render
 import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 import jp.aquagear.layout.compiler.render.lexer.result.Type
@@ -39,9 +38,9 @@ class AquagearScrollViewLayout(context: Context) : ScrollView(context) {
 
     private fun setEvent() {
         params?.get("tap")?.let {
-            if (context is JSEngineInterface) {
+            if (context is JSEngine.JSEngineInterface) {
                 setOnClickListener { _ ->
-                    (this.context as JSEngineInterface).getEngine().tap(it.value, jsonObject.toString())
+                    (this.context as JSEngine.JSEngineInterface).getEngine().tap(it.value, jsonObject.toString())
                 }
             }
         }
@@ -49,8 +48,8 @@ class AquagearScrollViewLayout(context: Context) : ScrollView(context) {
         params?.get("for")?.let {
             when (it.type) {
                 Type.VARIABLE -> {
-                    if (this.context is JSEngineInterface) {
-                        (context as JSEngineInterface).getEngine().run {
+                    if (this.context is JSEngine.JSEngineInterface) {
+                        (context as JSEngine.JSEngineInterface).getEngine().run {
                             setDataListener(it)
                             update(it.value)
                         }
