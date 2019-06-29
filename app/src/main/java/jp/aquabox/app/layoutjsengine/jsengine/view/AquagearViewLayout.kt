@@ -55,9 +55,6 @@ class AquagearViewLayout(context: Context?) : LinearLayout(context) {
                         }
                     }
                 }
-                else -> {
-
-                }
             }
         }
 
