@@ -16,7 +16,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.StringReader
 
-
 class JSEngine(context: Context?, onLoadListener: JSLoadListener) {
     val jsData: JSData = JSData()
     val webView: WebView = WebView(context)
