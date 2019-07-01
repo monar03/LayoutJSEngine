@@ -2,20 +2,20 @@ package jp.aquabox.app.layoutjsengine.jsengine.render
 
 import android.content.Context
 import android.view.View
-import android.widget.LinearLayout
-import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearHorizonalScrollViewLayout
-import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearScrollViewLayout
+import android.widget.ScrollView
+import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearHorizonalScrollLayout
+import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearLayout
+import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearScrollLayout
 import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearTextView
-import jp.aquagear.layout.compiler.render.compiler.BlockRender
 import jp.aquagear.layout.compiler.render.compiler.Render
 import jp.aquagear.layout.compiler.render.compiler.StringRender
 import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 import org.json.JSONObject
 
-class ScrollViewRender : BlockRender() {
-    fun render(context: Context, jsonObject: JSONObject?): Any {
-        val scrollView = if (params.containsKey("horizonal")) {
-            AquagearHorizonalScrollViewLayout(context).apply {
+class ScrollViewRender : AquagearRender() {
+    override fun render(context: Context, jsonObject: JSONObject?): View {
+        val scrollView: ScrollView = if (params.containsKey("horizonal")) {
+            AquagearHorizonalScrollLayout(context).apply {
                 set(this@ScrollViewRender.params, this@ScrollViewRender.styles, jsonObject)
                 if (params.containsKey("for")) {
                     setTemplateRender(renders)
@@ -23,7 +23,7 @@ class ScrollViewRender : BlockRender() {
                 }
             }
         } else {
-            AquagearScrollViewLayout(context).apply {
+            AquagearScrollLayout(context).apply {
                 set(this@ScrollViewRender.params, this@ScrollViewRender.styles, jsonObject)
                 if (params.containsKey("for")) {
                     setTemplateRender(renders)
@@ -32,7 +32,7 @@ class ScrollViewRender : BlockRender() {
             }
         }
 
-        val block = LinearLayout(context).apply {
+        val block: AquagearLayout = AquagearLayout(context).apply {
             scrollView.addView(this)
         }
 

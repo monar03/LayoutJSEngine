@@ -2,17 +2,16 @@ package jp.aquabox.app.layoutjsengine.jsengine.render
 
 import android.content.Context
 import android.view.View
+import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearLayout
 import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearTextView
-import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearViewLayout
-import jp.aquagear.layout.compiler.render.compiler.BlockRender
 import jp.aquagear.layout.compiler.render.compiler.Render
 import jp.aquagear.layout.compiler.render.compiler.StringRender
 import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 import org.json.JSONObject
 
-class ViewRender : BlockRender() {
-    fun render(context: Context, jsonObject: JSONObject?): Any {
-        val block = AquagearViewLayout(context).apply {
+class ViewRender : AquagearRender() {
+    override fun render(context: Context, jsonObject: JSONObject?): View {
+        val block = AquagearLayout(context).apply {
             set(this@ViewRender.params, this@ViewRender.styles, jsonObject)
             if (params.containsKey("for")) {
                 setTemplateRender(renders)

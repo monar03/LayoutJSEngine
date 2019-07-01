@@ -8,7 +8,7 @@ import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 import jp.aquagear.layout.compiler.render.lexer.result.Type
 import org.json.JSONObject
 
-class AquagearTextView(context: Context?) : TextView(context) {
+class AquagearTextView(context: Context?) : TextView(context), AquagearDesign {
     private lateinit var textParam: StringVariable.Parameter
     private lateinit var params: Map<String, StringVariable.Parameter>
     private lateinit var styles: Map<String, String>
@@ -42,6 +42,8 @@ class AquagearTextView(context: Context?) : TextView(context) {
     }
 
     private fun setTextViewDesign() {
+        setDesign(styles, this)
+
         when (textParam.type) {
             Type.CONST -> {
                 text = textParam.value
@@ -67,15 +69,6 @@ class AquagearTextView(context: Context?) : TextView(context) {
             else -> {
 
             }
-        }
-
-        styles["padding"]?.let {
-            setPadding(
-                it.toInt(),
-                it.toInt(),
-                it.toInt(),
-                it.toInt()
-            )
         }
     }
 }

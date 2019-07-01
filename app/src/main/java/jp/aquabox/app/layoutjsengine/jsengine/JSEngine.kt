@@ -43,14 +43,10 @@ class JSEngine(context: Context?, onLoadListener: JSLoadListener) {
                     for (render: Render in renders) {
                         if (render is ViewRender) {
                             val o = render.render(this@JSEngine.webView.context, null)
-                            if (o is View) {
-                                onLoadListener.onLoadFinish(o)
-                            }
+                            onLoadListener.onLoadFinish(o)
                         } else if (render is ScrollViewRender) {
                             val o = render.render(this@JSEngine.webView.context, null)
-                            if (o is View) {
-                                onLoadListener.onLoadFinish(o)
-                            }
+                            onLoadListener.onLoadFinish(o)
                         }
                     }
                 }

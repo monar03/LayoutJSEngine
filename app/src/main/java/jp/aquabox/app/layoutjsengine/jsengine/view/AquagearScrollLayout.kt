@@ -1,11 +1,10 @@
 package jp.aquabox.app.layoutjsengine.jsengine.view
 
 import android.content.Context
-import android.view.View
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
 import jp.aquabox.app.layoutjsengine.jsengine.data.DataListener
-import jp.aquabox.app.layoutjsengine.jsengine.render.ScrollViewRender
 import jp.aquabox.app.layoutjsengine.jsengine.render.TextRender
 import jp.aquabox.app.layoutjsengine.jsengine.render.ViewRender
 import jp.aquagear.layout.compiler.render.compiler.Render
@@ -13,7 +12,7 @@ import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 import jp.aquagear.layout.compiler.render.lexer.result.Type
 import org.json.JSONObject
 
-class AquagearViewLayout(context: Context?) : LinearLayout(context) {
+class AquagearScrollLayout(context: Context) : ScrollView(context), AquagearDesign {
     private var params: Map<String, StringVariable.Parameter>? = null
     private var styles: Map<String, String>? = null
     private var templateRenders: List<Render>? = null
@@ -55,6 +54,9 @@ class AquagearViewLayout(context: Context?) : LinearLayout(context) {
                         }
                     }
                 }
+                else -> {
+
+                }
             }
         }
 
@@ -65,51 +67,34 @@ class AquagearViewLayout(context: Context?) : LinearLayout(context) {
             it.value,
             object : DataListener {
                 override fun onUpdate(data: JSONObject) {
-                    this@AquagearViewLayout.removeAllViews()
+                    this@AquagearScrollLayout.removeAllViews()
                     val jsons = data.getJSONArray(it.value)
+                    val block = LinearLayout(context).apply {
+                        orientation = LinearLayout.HORIZONTAL
+                    }
+
                     for (i in 0 until jsons.length()) {
                         templateRenders?.map { render ->
-                            var v: View? = null
                             when (render) {
                                 is ViewRender -> {
-                                    v = render.render(context, jsons.getJSONObject(i)) as View
+                                    val v = render.render(context, jsons.getJSONObject(i))
+                                    block.addView(v)
                                 }
                                 is TextRender -> {
-                                    v = render.render(context, jsons.getJSONObject(i))
-                                }
-                                is ScrollViewRender -> {
-                                    v = render.render(context, jsons.getJSONObject(i)) as View
+                                    val v = render.render(context, jsons.getJSONObject(i))
+                                    block.addView(v)
                                 }
 
                             }
-                            if (v != null) {
-                                this@AquagearViewLayout.addView(v)
-                            }
                         }
                     }
+                    this@AquagearScrollLayout.addView(block)
                 }
             }
         )
     }
 
     private fun setBlockDesign() {
-        styles?.get("orientation")?.let {
-            when (it) {
-                "horizon" -> {
-                    orientation = HORIZONTAL
-                }
-                else -> {
-                    orientation = VERTICAL
-                }
-            }
-        }
-        styles?.get("padding")?.let {
-            setPadding(
-                it.toInt(),
-                it.toInt(),
-                it.toInt(),
-                it.toInt()
-            )
-        }
+        setDesign(styles, this)
     }
 }
