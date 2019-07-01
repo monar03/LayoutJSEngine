@@ -5,6 +5,9 @@ import android.view.ViewGroup
 
 interface AquagearDesign {
     fun setDesign(styles: Map<String, String>?, view: View) {
+        val width = styles?.get("width")?.toInt() ?: ViewGroup.LayoutParams.WRAP_CONTENT
+        val height = styles?.get("height")?.toInt() ?: ViewGroup.LayoutParams.WRAP_CONTENT
+        view.layoutParams = ViewGroup.MarginLayoutParams(width, height)
         styles?.get("padding")?.let {
             view.setPadding(
                 it.toInt(),
@@ -15,16 +18,12 @@ interface AquagearDesign {
         }
 
         styles?.get("margin")?.let {
-            view.setPadding(
+            (view.layoutParams as ViewGroup.MarginLayoutParams).setMargins(
                 it.toInt(),
                 it.toInt(),
                 it.toInt(),
                 it.toInt()
             )
         }
-
-        val width = styles?.get("width")?.toInt() ?: ViewGroup.LayoutParams.WRAP_CONTENT
-        val height = styles?.get("height")?.toInt() ?: ViewGroup.LayoutParams.WRAP_CONTENT
-        view.layoutParams = ViewGroup.LayoutParams(width, height)
     }
 }
