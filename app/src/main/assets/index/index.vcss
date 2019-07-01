@@ -1,5 +1,6 @@
 .test {
     padding:10;
+    margin:100;
 }
 .box {
     orientation : vertical;
