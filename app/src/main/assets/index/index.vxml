@@ -3,10 +3,10 @@
         <view tap="tap" class="test">
             {{test}}
         </view>
-        <view tap="tap1">
+        <view class="test1" tap="tap1">
             {{test1}}
         </view>
-        <text>
+        <text class="text">
             {{test2}}
         </text>
     </view>

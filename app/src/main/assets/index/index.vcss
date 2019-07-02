@@ -1,10 +1,19 @@
 .test {
-    padding:10;
-    margin:100;
+    padding:10px;
+}
+.test1 {
+    padding:10dp;
 }
 .box {
-    orientation : vertical;
+    orientation : horizon;
 }
+
+.text {
+    size:20sp;
+}
+
 .scroll {
-    height : 300;
+
+    height : fill;
+    width  : fill;
 }
