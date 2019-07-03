@@ -38,15 +38,12 @@ class ScrollViewRender : AquagearRender() {
 
         for (render: Render in renders) {
             when (render) {
-                is ViewRender -> {
-                    block.addView(render.render(context, jsonObject) as View?)
-                }
                 is StringRender -> {
                     block.addView(AquagearTextView(context).apply {
                         set(render.render() as StringVariable.Parameter, mapOf(), mapOf(), jsonObject)
                     })
                 }
-                is TextRender -> {
+                is AquagearRender -> {
                     block.addView(render.render(context, jsonObject))
                 }
             }

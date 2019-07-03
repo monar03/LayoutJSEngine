@@ -6,9 +6,7 @@ import android.util.Log
 import android.view.View
 import android.webkit.*
 import jp.aquabox.app.layoutjsengine.jsengine.data.JSData
-import jp.aquabox.app.layoutjsengine.jsengine.render.ScrollViewRender
-import jp.aquabox.app.layoutjsengine.jsengine.render.TextRender
-import jp.aquabox.app.layoutjsengine.jsengine.render.ViewRender
+import jp.aquabox.app.layoutjsengine.jsengine.render.*
 import jp.aquagear.layout.compiler.Compiler
 import jp.aquagear.layout.compiler.render.compiler.Render
 import org.json.JSONObject
@@ -31,7 +29,8 @@ class JSEngine(context: Context?, onLoadListener: JSLoadListener) {
                     mapOf(
                         "view" to ViewRender::class.java,
                         "text" to TextRender::class.java,
-                        "scroll-view" to ScrollViewRender::class.java
+                        "scroll-view" to ScrollViewRender::class.java,
+                        "image" to ImageRender::class.java
                     )
                 ).compile(
                     layoutStr,
@@ -41,10 +40,7 @@ class JSEngine(context: Context?, onLoadListener: JSLoadListener) {
                 if (renders != null) {
                     // TODO あとで継承で整理
                     for (render: Render in renders) {
-                        if (render is ViewRender) {
-                            val o = render.render(this@JSEngine.webView.context, null)
-                            onLoadListener.onLoadFinish(o)
-                        } else if (render is ScrollViewRender) {
+                        if (render is AquagearRender) {
                             val o = render.render(this@JSEngine.webView.context, null)
                             onLoadListener.onLoadFinish(o)
                         }

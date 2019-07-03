@@ -2,8 +2,18 @@ package jp.aquabox.app.layoutjsengine.jsengine.view
 
 import android.view.View
 import android.view.ViewGroup
+import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
+import org.json.JSONObject
 
-interface AquagearDesign {
+interface AquagearViewInterface {
+    fun setTapEvent(view: View, funcName: String, jsonObject: JSONObject?) {
+        if (view.context is JSEngine.JSEngineInterface) {
+            view.setOnClickListener {
+                (it.context as JSEngine.JSEngineInterface).getEngine().tap(funcName, jsonObject.toString())
+            }
+        }
+    }
+
     fun setDesign(styles: Map<String, String>?, view: View) {
         val width: Int = styles?.get("width")?.run {
             if (this == "wrap") {

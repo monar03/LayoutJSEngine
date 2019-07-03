@@ -12,6 +12,11 @@ Page({
             test2: 'Hello World6',
         },
         {
+            test: 'Hello World4',
+            test1: 'Hello World5',
+            test2: 'Hello World6',
+        },
+        {
             test: 'Hello World7',
             test1: 'Hello World8',
             test2: 'Hello World9',

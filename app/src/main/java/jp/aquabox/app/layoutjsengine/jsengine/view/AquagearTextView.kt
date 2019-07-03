@@ -8,7 +8,7 @@ import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 import jp.aquagear.layout.compiler.render.lexer.result.Type
 import org.json.JSONObject
 
-class AquagearTextView(context: Context?) : TextView(context), AquagearDesign {
+class AquagearTextView(context: Context?) : TextView(context), AquagearViewInterface {
     private lateinit var textParam: StringVariable.Parameter
     private lateinit var params: Map<String, StringVariable.Parameter>
     private lateinit var styles: Map<String, String>
@@ -33,18 +33,14 @@ class AquagearTextView(context: Context?) : TextView(context), AquagearDesign {
     // TODO ViewRenderも含め設定の所は最適化する
     private fun setEvent() {
         params["tap"]?.let {
-            if (context is JSEngine.JSEngineInterface) {
-                setOnClickListener { _ ->
-                    (this.context as JSEngine.JSEngineInterface).getEngine().tap(it.value, jsonObject.toString())
-                }
-            }
+            setTapEvent(this@AquagearTextView, it.value, jsonObject)
         }
     }
 
     private fun setTextViewDesign() {
         setDesign(styles, this)
 
-        styles["size"]?.let {
+        styles["textSize"]?.let {
             this.textSize = DisplaySizeConverter.displaySizeConvert(it, context)
         }
 

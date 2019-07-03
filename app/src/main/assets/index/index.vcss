@@ -5,15 +5,19 @@
     padding:10dp;
 }
 .box {
-    orientation : horizon;
+    orientation : vertical;
+    width :fill;
 }
 
 .text {
-    size:20sp;
+    textSize:20sp;
 }
 
 .scroll {
-
     height : fill;
     width  : fill;
+}
+
+.image {
+    src: "https://avatars1.githubusercontent.com/u/2632317?s=460&v=4";
 }
