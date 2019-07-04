@@ -7,6 +7,7 @@ import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
 import jp.aquabox.app.layoutjsengine.jsengine.data.DataListener
 import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 import jp.aquagear.layout.compiler.render.lexer.result.Type
+import org.json.JSONException
 import org.json.JSONObject
 import java.net.URL
 import kotlin.concurrent.thread
@@ -40,21 +41,12 @@ class AquagearImageView(context: Context) : ImageView(context), AquagearViewInte
 
         params["src"]?.let {
             if (it.type == Type.CONST) {
-                thread {
-                    val url = URL(it.value)
-                    val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                    handler.post {
-                        setImageBitmap(bmp)
-                    }
-                }
+                loadImage(it.value)
             } else {
                 if (jsonObject != null) {
-                    thread {
-                        val url = URL(jsonObject!!.getString(it.value))
-                        val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                        handler.post {
-                            setImageBitmap(bmp)
-                        }
+                    try {
+                        loadImage(jsonObject!!.getString(it.value))
+                    } catch (e: JSONException) {
                     }
                 } else {
                     (context as JSEngine.JSEngineInterface).getEngine().run {
@@ -62,23 +54,23 @@ class AquagearImageView(context: Context) : ImageView(context), AquagearViewInte
                             it.value,
                             object : DataListener {
                                 override fun onUpdate(data: JSONObject) {
-                                    thread {
-                                        try {
-                                            val url = URL(data.getString(it.value))
-                                            val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                                            handler.post {
-                                                setImageBitmap(bmp)
-                                            }
-                                        } catch (e: Exception) {
-
-                                        }
-                                    }
+                                    loadImage(data.getString(it.value))
                                 }
                             }
                         )
                         update(it.value)
                     }
                 }
+            }
+        }
+    }
+
+    private fun loadImage(str: String) {
+        thread {
+            val url = URL(str)
+            val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            handler.post {
+                setImageBitmap(bmp)
             }
         }
     }
