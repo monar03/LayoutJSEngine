@@ -1,16 +1,18 @@
-<view class="box">
-    <image class="image" />
-    <scroll-view class="scroll">
-        <view for="{{list}}" class="box">
-            <view tap="tap" class="test">
-                {{test}}
+<scroll-view class="scroll">
+     <view for="{{list}}" class="box">
+        <view class="box2" tap="tap">
+            <image src="{{url}}" />
+            <view class="box">
+                <view class="test">
+                    {{test}}
+                </view>
+                <view class="test1" tap="tap1">
+                    {{test1}}
+                </view>
+                <text class="text">
+                    {{test2}}
+                </text>
             </view>
-            <view class="test1" tap="tap1">
-                {{test1}}
-            </view>
-            <text class="text">
-                {{test2}}
-            </text>
         </view>
-    </scroll-view>
-</view>
+    </view>
+</scroll-view>
