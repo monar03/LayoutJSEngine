@@ -1,11 +1,11 @@
-class Page {
+class Module {
     constructor(obj) {
         this.obj = obj
     }
 
     setData(key, data) {
         this.obj.data[key] = data
-        aquagear.update(key)
+        aquagear.update(this.name, key)
     }
 
     getData(key) {

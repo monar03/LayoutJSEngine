@@ -1,5 +1,0 @@
-<view class="box">
-    <view tap="tap" class="test">
-        今日は良い天気ですね。
-    </view>
-</view>

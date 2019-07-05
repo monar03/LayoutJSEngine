@@ -1,51 +1,20 @@
 package jp.aquabox.app.layoutjsengine.jsengine
 
 import android.content.Context
-import android.util.JsonReader
 import android.util.Log
 import android.view.View
 import android.webkit.*
-import jp.aquabox.app.layoutjsengine.jsengine.data.JSData
-import jp.aquabox.app.layoutjsengine.jsengine.render.*
-import jp.aquagear.layout.compiler.Compiler
-import jp.aquagear.layout.compiler.render.compiler.Render
-import org.json.JSONObject
 import java.io.IOException
-import java.io.InputStream
-import java.io.StringReader
 
 class JSEngine(context: Context?, onLoadListener: JSLoadListener) {
-    val jsData: JSData = JSData()
-    val webView: WebView = WebView(context)
-    lateinit var module: String
+    private val webView: WebView = WebView(context)
+    private val modules: MutableMap<String, LayoutModule> = mutableMapOf()
 
     init {
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                val layoutStr = loadFile(module + "/index.vxml")
-                val designStr = loadFile(module + "/index.vcss")
-                val renders: List<Render>? = Compiler(
-                    mapOf(
-                        "view" to ViewRender::class.java,
-                        "text" to TextRender::class.java,
-                        "scroll-view" to ScrollViewRender::class.java,
-                        "image" to ImageRender::class.java
-                    )
-                ).compile(
-                    layoutStr,
-                    designStr
-                )
-
-                if (renders != null) {
-                    // TODO あとで継承で整理
-                    for (render: Render in renders) {
-                        if (render is AquagearRender) {
-                            val o = render.render(this@JSEngine.webView.context, null)
-                            onLoadListener.onLoadFinish(o)
-                        }
-                    }
-                }
+                onLoadListener.onReady()
             }
         }
         webView.webChromeClient = object : WebChromeClient() {
@@ -66,39 +35,21 @@ class JSEngine(context: Context?, onLoadListener: JSLoadListener) {
         context?.let {
             webView.addJavascriptInterface(JsInterface(context), "aquagear")
         }
+
+        loadEngine()
     }
 
-    fun load(module: String?) {
-        this.module = module ?: "index"
-        loadJS(this.module + "/index.js")
-    }
 
-    private fun loadFile(scriptFile: String): String {
-        val input: InputStream = webView.context.assets.open(scriptFile)
-        val buffer = ByteArray(input.available())
-        input.read(buffer)
-        input.close()
-
-        return String(buffer, Charsets.UTF_8)
-    }
-
-    private fun loadJS(scriptFile: String) {
+    private fun loadEngine() {
         try {
-            val input: InputStream = webView.context.assets.open(scriptFile)
+            val input = webView.context.assets.open("Module.js")
             val buffer = ByteArray(input.available())
             input.read(buffer)
             input.close()
 
-            val input1 = webView.context.assets.open("Page.js")
-            val buffer1 = ByteArray(input1.available())
-            input1.read(buffer1)
-            input1.close()
-
             val html = "<html>\n" +
                     "<head>\n" +
-                    "    <script>\n" +
-                    "        \n" + String(buffer1, Charsets.UTF_8) +
-                    "        \n page = new " + String(buffer, Charsets.UTF_8) +
+                    "    <script src=\"file:///android_asset/Module.js\">\n" +
                     "    </script>\n" +
                     "</head>\n" +
                     "</html>"
@@ -116,20 +67,24 @@ class JSEngine(context: Context?, onLoadListener: JSLoadListener) {
 
     }
 
-    fun update(key: String) {
-        webView.evaluateJavascript("javascript:page.getData('$key')") {
-            it?.run {
-                // XXX 変なエスケープ文字列をサニタイズする
-                val reader = JsonReader(StringReader(this))
-                reader.isLenient = true
-                jsData.update(key, JSONObject(reader.nextString()))
-            }
-        }
+    fun loadModule(
+        name: String,
+        layoutStr: String,
+        designStr: String,
+        scriptStr: String,
+        onLoadListener: JSViewLoadListener
+    ) {
+        val module = LayoutModule(webView)
+        module.load(
+            name,
+            layoutStr,
+            designStr,
+            scriptStr,
+            onLoadListener
+        )
+        modules[name] = module
     }
 
-    fun tap(funcName: String, jsonStr: String) {
-        webView.evaluateJavascript("javascript:page.onTap('$funcName', $jsonStr)", null)
-    }
 
     fun onLaunch() {
         webView.loadUrl("javascript:App.onLaunch()")
@@ -147,8 +102,18 @@ class JSEngine(context: Context?, onLoadListener: JSLoadListener) {
         webView.loadUrl("javascript:App.onError()")
     }
 
-    interface JSLoadListener {
-        fun onLoadFinish(v: View)
+    fun update(name: String, key: String) {
+        modules[name]?.let {
+            it.update(key)
+        }
+    }
+
+    abstract class JSLoadListener {
+        open fun onReady() {}
+    }
+
+    interface JSViewLoadListener {
+        fun onViewLoadEnd(v: View)
     }
 
     interface JSEngineInterface {

@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.widget.ImageView
 import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
-import jp.aquabox.app.layoutjsengine.jsengine.data.DataListener
+import jp.aquabox.app.layoutjsengine.jsengine.LayoutModule
 import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
 import jp.aquagear.layout.compiler.render.lexer.result.Type
 import org.json.JSONException
@@ -13,15 +13,18 @@ import java.net.URL
 import kotlin.concurrent.thread
 
 class AquagearImageView(context: Context) : ImageView(context), AquagearViewInterface {
+    private lateinit var module: LayoutModule
     private lateinit var params: Map<String, StringVariable.Parameter>
     private lateinit var styles: Map<String, String>
     private var jsonObject: JSONObject? = null
 
     fun set(
+        module: LayoutModule,
         params: Map<String, StringVariable.Parameter>,
         styles: Map<String, String>,
         jsonObject: JSONObject?
     ) {
+        this.module = module
         this.params = params
         this.styles = styles
         this.jsonObject = jsonObject
@@ -32,7 +35,7 @@ class AquagearImageView(context: Context) : ImageView(context), AquagearViewInte
 
     private fun setEvent() {
         params["tap"]?.let {
-            setTapEvent(this@AquagearImageView, it.value, jsonObject)
+            setTapEvent(this@AquagearImageView, it.value, module, jsonObject)
         }
     }
 
@@ -50,15 +53,15 @@ class AquagearImageView(context: Context) : ImageView(context), AquagearViewInte
                     }
                 } else {
                     (context as JSEngine.JSEngineInterface).getEngine().run {
-                        jsData.addListener(
+                        module.addListener(
                             it.value,
-                            object : DataListener {
+                            object : LayoutModule.DataListener {
                                 override fun onUpdate(data: JSONObject) {
                                     loadImage(data.getString(it.value))
                                 }
                             }
                         )
-                        update(it.value)
+                        module.update(it.value)
                     }
                 }
             }

@@ -38,10 +38,10 @@ class JsInterface(private val context: Context) {
     }
 
     @JavascriptInterface
-    fun update(key: String) {
+    fun update(name: String, key: String) {
         hanlder.post {
             if (context is JSEngine.JSEngineInterface) {
-                context.getEngine().update(key)
+                context.getEngine().update(name, key)
             }
         }
     }

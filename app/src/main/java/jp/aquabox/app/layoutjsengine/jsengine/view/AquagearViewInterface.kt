@@ -2,15 +2,13 @@ package jp.aquabox.app.layoutjsengine.jsengine.view
 
 import android.view.View
 import android.view.ViewGroup
-import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
+import jp.aquabox.app.layoutjsengine.jsengine.LayoutModule
 import org.json.JSONObject
 
 interface AquagearViewInterface {
-    fun setTapEvent(view: View, funcName: String, jsonObject: JSONObject?) {
-        if (view.context is JSEngine.JSEngineInterface) {
-            view.setOnClickListener {
-                (it.context as JSEngine.JSEngineInterface).getEngine().tap(funcName, jsonObject.toString())
-            }
+    fun setTapEvent(view: View, funcName: String, module: LayoutModule, jsonObject: JSONObject?) {
+        view.setOnClickListener {
+            module.tap(funcName, jsonObject.toString())
         }
     }
 

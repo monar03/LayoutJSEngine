@@ -1,6 +1,0 @@
-.test {
-    padding:10;
-}
-.box {
-    orientation : vertical;
-}

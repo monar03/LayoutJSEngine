@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import android.widget.LinearLayout
 import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
-import jp.aquabox.app.layoutjsengine.jsengine.data.DataListener
+import jp.aquabox.app.layoutjsengine.jsengine.LayoutModule
 import jp.aquabox.app.layoutjsengine.jsengine.render.AquagearRender
 import jp.aquagear.layout.compiler.render.compiler.Render
 import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
@@ -12,16 +12,19 @@ import jp.aquagear.layout.compiler.render.lexer.result.Type
 import org.json.JSONObject
 
 class AquagearLayout(context: Context?) : LinearLayout(context), AquagearViewInterface {
+    private lateinit var module: LayoutModule
     private var params: Map<String, StringVariable.Parameter>? = null
     private var styles: Map<String, String>? = null
     private var templateRenders: List<Render>? = null
     private var jsonObject: JSONObject? = null
 
     fun set(
+        module: LayoutModule,
         params: Map<String, StringVariable.Parameter>,
         styles: Map<String, String>,
         jsonObject: JSONObject?
     ) {
+        this.module = module
         this.params = params
         this.styles = styles
         this.jsonObject = jsonObject
@@ -36,7 +39,7 @@ class AquagearLayout(context: Context?) : LinearLayout(context), AquagearViewInt
 
     private fun setEvent() {
         params?.get("tap")?.let {
-            setTapEvent(this@AquagearLayout, it.value, jsonObject)
+            setTapEvent(this@AquagearLayout, it.value, module, jsonObject)
         }
 
         params?.get("for")?.let {
@@ -45,7 +48,7 @@ class AquagearLayout(context: Context?) : LinearLayout(context), AquagearViewInt
                     if (this.context is JSEngine.JSEngineInterface) {
                         (context as JSEngine.JSEngineInterface).getEngine().run {
                             setDataListener(it)
-                            update(it.value)
+                            module.update(it.value)
                         }
                     }
                 }
@@ -54,10 +57,10 @@ class AquagearLayout(context: Context?) : LinearLayout(context), AquagearViewInt
 
     }
 
-    private fun JSEngine.setDataListener(it: StringVariable.Parameter) {
-        jsData.addListener(
+    private fun setDataListener(it: StringVariable.Parameter) {
+        module.addListener(
             it.value,
-            object : DataListener {
+            object : LayoutModule.DataListener {
                 override fun onUpdate(data: JSONObject) {
                     this@AquagearLayout.removeAllViews()
                     val jsons = data.getJSONArray(it.value)
@@ -65,7 +68,10 @@ class AquagearLayout(context: Context?) : LinearLayout(context), AquagearViewInt
                         templateRenders?.map { render ->
                             var v: View? = null
                             when (render) {
-                                is AquagearRender -> v = render.render(context, jsons.getJSONObject(i))
+                                is AquagearRender -> v = render.render(
+                                    context,
+                                    module, jsons.getJSONObject(i)
+                                )
                             }
                             if (v != null) {
                                 this@AquagearLayout.addView(v)

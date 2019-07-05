@@ -1,4 +1,4 @@
-Page({
+Module({
   data: {
     list: [
         {
@@ -31,7 +31,7 @@ Page({
   },
   tap1: function() {
     aquagear.showToast('test')
-    page.setData('list', [
+    setData('list', [
     {
       test: 'Hello World1',
       test1: 'Hello World2',
