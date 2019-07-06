@@ -47,6 +47,10 @@ class AquagearTextView(context: Context?) : TextView(context), AquagearViewInter
             this.textSize = DisplaySizeConverter.displaySizeConvert(it, context)
         }
 
+        styles["textLines"]?.let {
+            setLines(it.toInt())
+        }
+
         when (textParam.type) {
             Type.CONST -> {
                 text = textParam.value

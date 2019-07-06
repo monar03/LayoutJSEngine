@@ -35,7 +35,10 @@ interface AquagearViewInterface {
 
         view.layoutParams = ViewGroup.MarginLayoutParams(width, height)
         setPadding(styles, view)
+        setMargin(styles, view)
+    }
 
+    fun setMargin(styles: Map<String, String>?, view: View) {
         styles?.get("margin")?.let {
             val size = DisplaySizeConverter.displaySizeConvert(it, view.context)
             (view.layoutParams as ViewGroup.MarginLayoutParams).setMargins(
