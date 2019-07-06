@@ -1,6 +1,7 @@
 package jp.aquabox.app.layoutjsengine.jsengine
 
 import android.util.JsonReader
+import android.util.Log
 import android.webkit.WebView
 import jp.aquabox.app.layoutjsengine.jsengine.render.*
 import jp.aquagear.layout.compiler.Compiler
@@ -20,7 +21,7 @@ class LayoutModule(private val webView: WebView) {
         onLoadListener: JSEngine.JSViewLoadListener
     ) {
         this.name = name
-        webView.evaluateJavascript("javascript:$name = new $scriptStr") {
+        webView.evaluateJavascript("javascript:var $name = new Module(\"$name\", $scriptStr)") {
             it?.run {
                 val renders = Compiler(
                     mapOf(
