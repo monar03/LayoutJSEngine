@@ -1,6 +1,7 @@
 package jp.aquabox.app.layoutjsengine.jsengine.view
 
 import android.content.Context
+import android.view.Gravity
 import android.widget.TextView
 import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
 import jp.aquabox.app.layoutjsengine.jsengine.LayoutModule
@@ -51,6 +52,22 @@ class AquagearTextView(context: Context?) : TextView(context), AquagearViewInter
             setLines(it.toInt())
         }
 
+        styles["gravity"]?.let {
+            when (it) {
+                "top" -> {
+                    gravity = Gravity.TOP
+                }
+                "bottom" -> {
+                    gravity = Gravity.BOTTOM
+                }
+                "left" -> {
+                    gravity = Gravity.START
+                }
+                "right" -> {
+                    gravity = Gravity.END
+                }
+            }
+        }
         when (textParam.type) {
             Type.CONST -> {
                 text = textParam.value
