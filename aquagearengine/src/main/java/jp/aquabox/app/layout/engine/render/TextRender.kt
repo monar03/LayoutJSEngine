@@ -1,9 +1,9 @@
-package jp.aquabox.app.aquagearengine.render
+package jp.aquabox.app.layout.engine.render
 
 import android.content.Context
 import android.view.View
-import jp.aquabox.app.aquagearengine.LayoutModule
-import jp.aquabox.app.aquagearengine.view.AquagearTextView
+import jp.aquabox.app.layout.engine.LayoutModule
+import jp.aquabox.app.layout.engine.view.AquagearTextView
 import jp.aquabox.layout.compiler.render.compiler.StringRender
 import jp.aquabox.layout.compiler.render.lexer.result.StringVariable
 import org.json.JSONObject

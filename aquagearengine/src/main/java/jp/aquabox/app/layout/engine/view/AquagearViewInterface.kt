@@ -1,9 +1,9 @@
-package jp.aquabox.app.aquagearengine.view
+package jp.aquabox.app.layout.engine.view
 
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
-import jp.aquabox.app.aquagearengine.LayoutModule
+import jp.aquabox.app.layout.engine.LayoutModule
 import org.json.JSONObject
 
 interface AquagearViewInterface {

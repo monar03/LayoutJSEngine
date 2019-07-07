@@ -1,10 +1,10 @@
-package jp.aquabox.app.aquagearengine.view
+package jp.aquabox.app.layout.engine.view
 
 import android.content.Context
 import android.view.Gravity
 import android.widget.TextView
-import jp.aquabox.app.aquagearengine.JSEngine
-import jp.aquabox.app.aquagearengine.LayoutModule
+import jp.aquabox.app.layout.engine.JSEngine
+import jp.aquabox.app.layout.engine.LayoutModule
 import jp.aquabox.layout.compiler.render.lexer.result.StringVariable
 import jp.aquabox.layout.compiler.render.lexer.result.Type
 import org.json.JSONObject
@@ -46,7 +46,8 @@ class AquagearTextView(context: Context?) : TextView(context),
         setDesign(styles, this)
 
         styles["textSize"]?.let {
-            this.textSize = DisplaySizeConverter.displaySizeConvert(it, context)
+            this.textSize =
+                DisplaySizeConverter.displaySizeConvert(it, context)
         }
 
         styles["textLines"]?.let {

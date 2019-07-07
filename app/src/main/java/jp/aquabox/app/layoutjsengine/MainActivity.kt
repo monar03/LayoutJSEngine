@@ -3,7 +3,7 @@ package jp.aquabox.app.layoutjsengine
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import jp.aquabox.app.aquagearengine.JSEngine
+import jp.aquabox.app.layout.engine.JSEngine
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.InputStream
 

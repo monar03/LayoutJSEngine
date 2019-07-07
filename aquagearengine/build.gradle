@@ -35,8 +35,8 @@ uploadArchives {
         mavenDeployer {
             repository url: "file://${repo.absolutePath}"
             pom.version = '1.0.0'
-            pom.groupId = 'jp.aquabox.app.aquagearengine'
-            pom.artifactId = 'AquagearEngine'
+            pom.groupId = 'jp.aquabox.app.layout'
+            pom.artifactId = 'aquagear-engine'
         }
     }
 }

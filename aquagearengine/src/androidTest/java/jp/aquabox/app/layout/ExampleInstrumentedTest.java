@@ -1,4 +1,4 @@
-package jp.aquabox.app.aquagearengine;
+package jp.aquabox.app.layout;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

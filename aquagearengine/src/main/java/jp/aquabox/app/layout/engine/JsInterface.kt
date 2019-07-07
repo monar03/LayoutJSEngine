@@ -1,8 +1,7 @@
-package jp.aquabox.app.aquagearengine
+package jp.aquabox.app.layout.engine
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Handler
 import android.webkit.JavascriptInterface
 import android.widget.Toast
