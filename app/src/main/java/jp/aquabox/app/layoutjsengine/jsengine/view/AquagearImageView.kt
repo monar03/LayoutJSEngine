@@ -5,8 +5,8 @@ import android.graphics.BitmapFactory
 import android.widget.ImageView
 import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
 import jp.aquabox.app.layoutjsengine.jsengine.LayoutModule
-import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
-import jp.aquagear.layout.compiler.render.lexer.result.Type
+import jp.aquabox.layout.compiler.render.lexer.result.StringVariable
+import jp.aquabox.layout.compiler.render.lexer.result.Type
 import org.json.JSONException
 import org.json.JSONObject
 import java.net.URL

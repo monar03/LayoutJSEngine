@@ -5,9 +5,9 @@ import android.view.View
 import jp.aquabox.app.layoutjsengine.jsengine.LayoutModule
 import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearLayout
 import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearTextView
-import jp.aquagear.layout.compiler.render.compiler.Render
-import jp.aquagear.layout.compiler.render.compiler.StringRender
-import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
+import jp.aquabox.layout.compiler.render.compiler.Render
+import jp.aquabox.layout.compiler.render.compiler.StringRender
+import jp.aquabox.layout.compiler.render.lexer.result.StringVariable
 import org.json.JSONObject
 
 class ViewRender : AquagearRender() {

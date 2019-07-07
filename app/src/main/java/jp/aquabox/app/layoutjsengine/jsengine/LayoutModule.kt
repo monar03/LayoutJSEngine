@@ -1,11 +1,10 @@
 package jp.aquabox.app.layoutjsengine.jsengine
 
 import android.util.JsonReader
-import android.util.Log
 import android.webkit.WebView
 import jp.aquabox.app.layoutjsengine.jsengine.render.*
-import jp.aquagear.layout.compiler.Compiler
-import jp.aquagear.layout.compiler.render.compiler.Render
+import jp.aquabox.layout.compiler.Compiler
+import jp.aquabox.layout.compiler.render.compiler.Render
 import org.json.JSONObject
 import java.io.StringReader
 

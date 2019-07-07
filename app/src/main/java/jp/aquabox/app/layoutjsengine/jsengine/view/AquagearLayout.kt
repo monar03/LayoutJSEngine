@@ -6,9 +6,9 @@ import android.widget.LinearLayout
 import jp.aquabox.app.layoutjsengine.jsengine.JSEngine
 import jp.aquabox.app.layoutjsengine.jsengine.LayoutModule
 import jp.aquabox.app.layoutjsengine.jsengine.render.AquagearRender
-import jp.aquagear.layout.compiler.render.compiler.Render
-import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
-import jp.aquagear.layout.compiler.render.lexer.result.Type
+import jp.aquabox.layout.compiler.render.compiler.Render
+import jp.aquabox.layout.compiler.render.lexer.result.StringVariable
+import jp.aquabox.layout.compiler.render.lexer.result.Type
 import org.json.JSONObject
 
 class AquagearLayout(context: Context?) : LinearLayout(context), AquagearViewInterface {

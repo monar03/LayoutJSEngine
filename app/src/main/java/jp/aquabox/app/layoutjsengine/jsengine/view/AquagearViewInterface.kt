@@ -1,5 +1,6 @@
 package jp.aquabox.app.layoutjsengine.jsengine.view
 
+import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import jp.aquabox.app.layoutjsengine.jsengine.LayoutModule
@@ -36,6 +37,10 @@ interface AquagearViewInterface {
         view.layoutParams = ViewGroup.MarginLayoutParams(width, height)
         setPadding(styles, view)
         setMargin(styles, view)
+
+        styles?.get("backgroundColor")?.let {
+            view.setBackgroundColor(Color.parseColor(it))
+        }
     }
 
     fun setMargin(styles: Map<String, String>?, view: View) {

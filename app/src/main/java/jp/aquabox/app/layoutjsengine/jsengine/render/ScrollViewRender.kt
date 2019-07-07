@@ -8,9 +8,9 @@ import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearHorizonalScrollLayout
 import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearLayout
 import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearScrollLayout
 import jp.aquabox.app.layoutjsengine.jsengine.view.AquagearTextView
-import jp.aquagear.layout.compiler.render.compiler.Render
-import jp.aquagear.layout.compiler.render.compiler.StringRender
-import jp.aquagear.layout.compiler.render.lexer.result.StringVariable
+import jp.aquabox.layout.compiler.render.compiler.Render
+import jp.aquabox.layout.compiler.render.compiler.StringRender
+import jp.aquabox.layout.compiler.render.lexer.result.StringVariable
 import org.json.JSONObject
 
 class ScrollViewRender : AquagearRender() {
