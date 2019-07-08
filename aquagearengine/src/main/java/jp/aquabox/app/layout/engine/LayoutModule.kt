@@ -29,11 +29,10 @@ class LayoutModule(private val webView: WebView) {
                         "scroll-view" to ScrollViewRender::class.java,
                         "image" to ImageRender::class.java
                     )
+                ).compile(
+                    layoutStr,
+                    designStr
                 )
-                    .compile(
-                        layoutStr,
-                        designStr
-                    )
 
                 if (renders != null) {
                     for (render: Render in renders) {

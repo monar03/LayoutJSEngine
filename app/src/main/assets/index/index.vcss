@@ -17,6 +17,7 @@
 
 .text {
     textSize:20sp;
+    backgroundDrawable : red;
 }
 
 .scroll {

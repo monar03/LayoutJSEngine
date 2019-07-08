@@ -1,10 +1,17 @@
 package jp.aquabox.app.layout.engine.view
 
+import android.content.res.ColorStateList
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.RippleDrawable
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import jp.aquabox.app.layout.engine.LayoutModule
 import org.json.JSONObject
+import java.net.URL
+import kotlin.concurrent.thread
 
 interface AquagearViewInterface {
     fun setTapEvent(view: View, funcName: String, module: LayoutModule, jsonObject: JSONObject?) {
@@ -42,6 +49,24 @@ interface AquagearViewInterface {
 
         styles?.get("backgroundColor")?.let {
             view.setBackgroundColor(Color.parseColor(it))
+        }
+        styles?.get("backgroundImage")?.let {
+            thread {
+                val url = URL(it)
+                val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+                view.handler.post {
+                    view.background = BitmapDrawable(view.resources, bmp)
+                }
+            }
+        }
+        styles?.get("foreground")?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                view.foreground = RippleDrawable(
+                    ColorStateList.valueOf(Color.parseColor(it)),
+                    null,
+                    null
+                )
+            }
         }
     }
 

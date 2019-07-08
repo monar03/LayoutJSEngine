@@ -11,8 +11,7 @@ import jp.aquabox.layout.compiler.render.lexer.result.StringVariable
 import jp.aquabox.layout.compiler.render.lexer.result.Type
 import org.json.JSONObject
 
-class AquagearLayout(context: Context?) : LinearLayout(context),
-    AquagearViewInterface {
+class AquagearLayout(context: Context?) : LinearLayout(context), AquagearViewInterface {
     private lateinit var module: LayoutModule
     private var params: Map<String, StringVariable.Parameter>? = null
     private var styles: Map<String, String>? = null
