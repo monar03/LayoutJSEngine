@@ -33,7 +33,7 @@ class JsInterface(private val context: Context) {
     @JavascriptInterface
     fun update(name: String, key: String) {
         hanlder.post {
-            if (context is JSEngine.JSEngineInterface) {
+            if (context is AquagearEngine.OnEngineInterface) {
                 context.getEngine().update(name, key)
             }
         }

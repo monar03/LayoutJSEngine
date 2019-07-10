@@ -6,7 +6,7 @@ import android.view.View
 import android.webkit.*
 import java.io.IOException
 
-class JSEngine(context: Context?, onLoadListener: JSLoadListener) {
+class AquagearEngine(context: Context?, onLoadListener: OnLoadListener) {
     private val webView: WebView = WebView(context)
     private val modules: MutableMap<String, LayoutModule> = mutableMapOf()
 
@@ -72,11 +72,10 @@ class JSEngine(context: Context?, onLoadListener: JSLoadListener) {
         layoutStr: String,
         designStr: String,
         scriptStr: String,
-        onLoadListener: JSViewLoadListener
+        onLoadListener: OnViewLoadListener
     ) {
-        val module = LayoutModule(webView)
+        val module = LayoutModule(webView, name)
         module.load(
-            name,
             layoutStr,
             designStr,
             scriptStr,
@@ -85,39 +84,20 @@ class JSEngine(context: Context?, onLoadListener: JSLoadListener) {
         modules[name] = module
     }
 
-
-    fun onLaunch() {
-        webView.loadUrl("javascript:App.onLaunch()")
-    }
-
-    fun onShow() {
-        webView.loadUrl("javascript:App.onShow()")
-    }
-
-    fun onHide() {
-        webView.loadUrl("javascript:App.onHide()")
-    }
-
-    fun onError() {
-        webView.loadUrl("javascript:App.onError()")
-    }
-
     fun update(name: String, key: String) {
-        modules[name]?.let {
-            it.update(key)
-        }
+        modules[name]?.update(key)
     }
 
-    abstract class JSLoadListener {
+    abstract class OnLoadListener {
         open fun onReady() {}
     }
 
-    interface JSViewLoadListener {
+    interface OnViewLoadListener {
         fun onViewLoadEnd(v: View)
     }
 
-    interface JSEngineInterface {
-        fun getEngine(): JSEngine
+    interface OnEngineInterface {
+        fun getEngine(): AquagearEngine
     }
 }
 

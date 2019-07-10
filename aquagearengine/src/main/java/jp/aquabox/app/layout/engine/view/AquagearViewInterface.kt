@@ -27,8 +27,7 @@ interface AquagearViewInterface {
             } else if (this == "fill") {
                 ViewGroup.LayoutParams.MATCH_PARENT
             } else {
-                DisplaySizeConverter.displaySizeConvert(this, view.context)
-                    .toInt()
+                DisplaySizeConverter.displaySizeConvert(this, view.context).toInt()
             }
         } ?: ViewGroup.LayoutParams.WRAP_CONTENT
 
@@ -38,8 +37,7 @@ interface AquagearViewInterface {
             } else if (this == "fill") {
                 ViewGroup.LayoutParams.MATCH_PARENT
             } else {
-                DisplaySizeConverter.displaySizeConvert(this, view.context)
-                    .toInt()
+                DisplaySizeConverter.displaySizeConvert(this, view.context).toInt()
             }
         } ?: ViewGroup.LayoutParams.WRAP_CONTENT
 
@@ -59,6 +57,7 @@ interface AquagearViewInterface {
                 }
             }
         }
+
         styles?.get("foreground")?.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 view.foreground = RippleDrawable(
@@ -72,8 +71,7 @@ interface AquagearViewInterface {
 
     fun setMargin(styles: Map<String, String>?, view: View) {
         styles?.get("margin")?.let {
-            val size =
-                DisplaySizeConverter.displaySizeConvert(it, view.context)
+            val size = DisplaySizeConverter.displaySizeConvert(it, view.context)
             (view.layoutParams as ViewGroup.MarginLayoutParams).setMargins(
                 size.toInt(),
                 size.toInt(),
@@ -83,8 +81,7 @@ interface AquagearViewInterface {
         }
 
         styles?.get("marginTop")?.let {
-            val size =
-                DisplaySizeConverter.displaySizeConvert(it, view.context)
+            val size = DisplaySizeConverter.displaySizeConvert(it, view.context)
             (view.layoutParams as ViewGroup.MarginLayoutParams).run {
                 setMargins(
                     this.leftMargin,

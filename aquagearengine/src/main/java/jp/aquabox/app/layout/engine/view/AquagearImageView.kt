@@ -3,7 +3,7 @@ package jp.aquabox.app.layout.engine.view
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.widget.ImageView
-import jp.aquabox.app.layout.engine.JSEngine
+import jp.aquabox.app.layout.engine.AquagearEngine
 import jp.aquabox.app.layout.engine.LayoutModule
 import jp.aquabox.layout.compiler.render.lexer.result.StringVariable
 import jp.aquabox.layout.compiler.render.lexer.result.Type
@@ -53,7 +53,7 @@ class AquagearImageView(context: Context) : ImageView(context),
                     } catch (e: JSONException) {
                     }
                 } else {
-                    (context as JSEngine.JSEngineInterface).getEngine().run {
+                    (context as AquagearEngine.OnEngineInterface).getEngine().run {
                         module.addListener(
                             it.value,
                             object : LayoutModule.DataListener {

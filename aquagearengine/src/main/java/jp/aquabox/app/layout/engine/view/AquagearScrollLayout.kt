@@ -3,7 +3,7 @@ package jp.aquabox.app.layout.engine.view
 import android.content.Context
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import jp.aquabox.app.layout.engine.JSEngine
+import jp.aquabox.app.layout.engine.AquagearEngine
 import jp.aquabox.app.layout.engine.LayoutModule
 import jp.aquabox.app.layout.engine.render.AquagearRender
 import jp.aquabox.layout.compiler.render.compiler.Render
@@ -46,8 +46,8 @@ class AquagearScrollLayout(context: Context) : ScrollView(context),
         params?.get("for")?.let {
             when (it.type) {
                 Type.VARIABLE -> {
-                    if (this.context is JSEngine.JSEngineInterface) {
-                        (context as JSEngine.JSEngineInterface).getEngine().run {
+                    if (this.context is AquagearEngine.OnEngineInterface) {
+                        (context as AquagearEngine.OnEngineInterface).getEngine().run {
                             setDataListener(it)
                             module.update(it.value)
                         }

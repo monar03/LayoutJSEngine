@@ -3,7 +3,7 @@ package jp.aquabox.app.layout.engine.view
 import android.content.Context
 import android.view.Gravity
 import android.widget.TextView
-import jp.aquabox.app.layout.engine.JSEngine
+import jp.aquabox.app.layout.engine.AquagearEngine
 import jp.aquabox.app.layout.engine.LayoutModule
 import jp.aquabox.layout.compiler.render.lexer.result.StringVariable
 import jp.aquabox.layout.compiler.render.lexer.result.Type
@@ -78,8 +78,8 @@ class AquagearTextView(context: Context?) : TextView(context),
                 if (jsonObject != null) {
                     // TODO データがない時の処理の追加
                     text = jsonObject!!.getString(textParam.value)
-                } else if (this.context is JSEngine.JSEngineInterface) {
-                    (context as JSEngine.JSEngineInterface).getEngine().run {
+                } else if (this.context is AquagearEngine.OnEngineInterface) {
+                    (context as AquagearEngine.OnEngineInterface).getEngine().run {
                         module.addListener(
                             textParam.value,
                             object : LayoutModule.DataListener {

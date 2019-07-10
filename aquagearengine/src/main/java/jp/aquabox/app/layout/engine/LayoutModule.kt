@@ -8,27 +8,19 @@ import jp.aquabox.layout.compiler.render.compiler.Render
 import org.json.JSONObject
 import java.io.StringReader
 
-class LayoutModule(private val webView: WebView) {
+open class LayoutModule(private val webView: WebView, val name: String) {
     private val listenerMap: MutableMap<String, MutableList<DataListener>> = mutableMapOf()
-    private lateinit var name: String
 
     fun load(
-        name: String,
         layoutStr: String,
         designStr: String,
         scriptStr: String,
-        onLoadListener: JSEngine.JSViewLoadListener
+        onLoadListener: AquagearEngine.OnViewLoadListener
     ) {
-        this.name = name
         webView.evaluateJavascript("javascript:var $name = new Module(\"$name\", $scriptStr)") {
             it?.run {
                 val renders = Compiler(
-                    mapOf(
-                        "view" to ViewRender::class.java,
-                        "text" to TextRender::class.java,
-                        "scroll-view" to ScrollViewRender::class.java,
-                        "image" to ImageRender::class.java
-                    )
+                    getTagMap()
                 ).compile(
                     layoutStr,
                     designStr
@@ -44,6 +36,16 @@ class LayoutModule(private val webView: WebView) {
                 }
             }
         }
+    }
+
+    open fun getTagMap(): Map<String, Class<out AquagearRender>> {
+        return mapOf(
+            "view" to ViewRender::class.java,
+            "text" to TextRender::class.java,
+            "scroll-view" to ScrollViewRender::class.java,
+            "image" to ImageRender::class.java,
+            "grid" to GridRender::class.java
+        )
     }
 
     fun refresh(key: String, data: JSONObject) {
