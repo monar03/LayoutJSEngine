@@ -1,7 +1,6 @@
 <scroll-view class="scroll">
-     <view class="box">
-        <grid for="{{list}}" class="box2" tap="tap">
-            <text>{{test}}</text>
-        </grid>
-    </view>
+     <grid class="box">
+        <text class="text">aaaaa</text>
+        <text class="text">bbbbb</text>
+    </grid>
 </scroll-view>

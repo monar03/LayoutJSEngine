@@ -96,4 +96,6 @@ class AquagearLayout(context: Context?) : LinearLayout(context), AquagearViewInt
             }
         }
     }
+
+    class LayoutParams(width: Int, height: Int) : LinearLayout.LayoutParams(width, height)
 }

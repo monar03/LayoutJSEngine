@@ -1,23 +1,21 @@
 .test {
     padding:10px;
 }
+
 .test1 {
     padding:10dp;
 }
-.box {
-    orientation : vertical;
-    width :fill;
-}
 
-.box2 {
-    margin : 10dp;
+.box {
+    orientation : horizon;
     width :fill;
-    column: 2;
 }
 
 .text {
-    textSize:20sp;
+    width: 0dp;
+    textSize:5sp;
     foreground : gray;
+    weight: 1;
 }
 
 .scroll {

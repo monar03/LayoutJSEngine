@@ -41,7 +41,11 @@ interface AquagearViewInterface {
             }
         } ?: ViewGroup.LayoutParams.WRAP_CONTENT
 
-        view.layoutParams = ViewGroup.MarginLayoutParams(width, height)
+        view.layoutParams = AquagearLayout.LayoutParams(width, height).apply {
+            styles?.get("weight")?.let {
+                weight = it.toFloat()
+            }
+        }
         setPadding(styles, view)
         setMargin(styles, view)
 
