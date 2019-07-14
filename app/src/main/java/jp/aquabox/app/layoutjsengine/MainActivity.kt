@@ -25,6 +25,18 @@ class MainActivity : AquagearEngineActivity() {
                 }
             }
         )
+        engine.loadModule(
+            "test1",
+            getFileString("index/index.vxml"),
+            getFileString("index/index.vcss"),
+            getFileString("index/index.js"),
+            object : AquagearEngine.OnViewLoadListener {
+                override fun onViewLoadEnd(v: View) {
+                    root.addView(v)
+                }
+            }
+        )
+
     }
 
     private fun getFileString(path: String): String {

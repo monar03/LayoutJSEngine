@@ -1,5 +1,6 @@
 package jp.aquabox.app.layout.engine
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.View
@@ -32,10 +33,7 @@ class AquagearEngine(context: Context?, onLoadListener: OnLoadListener) {
             this.javaScriptEnabled = true
         }
 
-        context?.let {
-            webView.addJavascriptInterface(JsInterface(context), "aquagear")
-        }
-
+        addJSInterface(JsInterface(this), "aquagear")
         loadEngine()
     }
 
@@ -57,7 +55,7 @@ class AquagearEngine(context: Context?, onLoadListener: OnLoadListener) {
                 "file:///android_asset",
                 html,
                 "text/html",
-                "UTF-0",
+                "UTF-8",
                 null
             )
         } catch (e: IOException) {
@@ -65,6 +63,11 @@ class AquagearEngine(context: Context?, onLoadListener: OnLoadListener) {
             e.printStackTrace()
         }
 
+    }
+
+    @SuppressLint("JavascriptInterface")
+    fun addJSInterface(jsInterface: AquagearEngineInterface, key: String) {
+        webView.addJavascriptInterface(jsInterface, key)
     }
 
     fun loadModule(
