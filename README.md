@@ -21,44 +21,46 @@ dependencies {
 ## サンプルコード
 https://github.com/monar03/LayoutJSEngine/blob/master/app/src/main/java/jp/aquabox/app/layoutjsengine/MainActivity.kt
 ```
-class MainActivity : AppCompatActivity(), JSEngine.JSEngineInterface {
-    lateinit var jsEngine: JSEngine
-
-    override fun getEngine(): JSEngine {
-        return jsEngine
-    }
-
+class MainActivity : AquagearEngineActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        jsEngine = JSEngine(
-            this,
-            object : JSEngine.JSLoadListener() {
-                override fun onReady() {
-                    jsEngine.loadModule(
-                        "test",
-                        getFileString("index/index.vxml"),
-                        getFileString("index/index.vcss"),
-                        getFileString("index/index.js"),
-                        object : JSEngine.JSViewLoadListener {
-                            override fun onViewLoadEnd(v: View) {
-                                root.addView(v)
-                            }
-                        }
-                    )
-                }
-
-                private fun getFileString(path: String): String {
-                    val input: InputStream = assets.open(path)
-                    val buffer = ByteArray(input.available())
-                    input.read(buffer)
-                    input.close()
-
-                    return String(buffer, Charsets.UTF_8)
-                }
-            })
     }
+
+    override fun onReadyEngine(engine: AquagearEngine) {
+        engine.loadModule(
+            "test",
+            getFileString("index/index.vxml"),
+            getFileString("index/index.vcss"),
+            getFileString("index/index.js"),
+            object : AquagearEngine.OnViewLoadListener {
+                override fun onViewLoadEnd(v: View) {
+                    root.addView(v)
+                }
+            }
+        )
+        engine.loadModule(
+            "test1",
+            getFileString("index/index.vxml"),
+            getFileString("index/index.vcss"),
+            getFileString("index/index.js"),
+            object : AquagearEngine.OnViewLoadListener {
+                override fun onViewLoadEnd(v: View) {
+                    root.addView(v)
+                }
+            }
+        )
+    }
+
+    private fun getFileString(path: String): String {
+        val input: InputStream = assets.open(path)
+        val buffer = ByteArray(input.available())
+        input.read(buffer)
+        input.close()
+
+        return String(buffer, Charsets.UTF_8)
+    }
+
 }
 ```
 
