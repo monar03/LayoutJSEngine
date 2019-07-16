@@ -1,7 +1,6 @@
 package jp.aquabox.app.layoutjsengine
 
 import android.os.Bundle
-import android.view.View
 import jp.aquabox.app.layout.AquagearEngineActivity
 import jp.aquabox.app.layout.engine.AquagearEngine
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,25 +17,19 @@ class MainActivity : AquagearEngineActivity() {
             "test",
             getFileString("index/index.vxml"),
             getFileString("index/index.vcss"),
-            getFileString("index/index.js"),
-            object : AquagearEngine.OnViewLoadListener {
-                override fun onViewLoadEnd(v: View) {
-                    root.addView(v)
-                }
-            }
-        )
+            getFileString("index/index.js")
+        ) {
+            root.addView(it)
+        }
+
         engine.loadModule(
             "test1",
             getFileString("index/index.vxml"),
             getFileString("index/index.vcss"),
-            getFileString("index/index.js"),
-            object : AquagearEngine.OnViewLoadListener {
-                override fun onViewLoadEnd(v: View) {
-                    root.addView(v)
-                }
-            }
-        )
-
+            getFileString("index/index.js")
+        ) {
+            root.addView(it)
+        }
     }
 
     private fun getFileString(path: String): String {

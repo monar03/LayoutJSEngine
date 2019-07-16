@@ -14,12 +14,10 @@ abstract class AquagearEngineActivity : AppCompatActivity(), AquagearEngine.OnEn
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         aquagearEngine = AquagearEngine(
-            this,
-            object : AquagearEngine.OnLoadListener() {
-                override fun onReady() {
-                    onReadyEngine(aquagearEngine)
-                }
-            })
+            this
+        ) {
+            onReadyEngine(aquagearEngine)
+        }
     }
 
     abstract fun onReadyEngine(engine: AquagearEngine)
