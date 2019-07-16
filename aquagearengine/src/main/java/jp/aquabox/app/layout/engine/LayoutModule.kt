@@ -67,7 +67,7 @@ open class LayoutModule(webView: WebView, name: String) {
         )
     }
 
-    fun refresh(key: String, data: JSONObject) {
+    private fun refresh(key: String, data: JSONObject) {
         listenerMap[key]?.map {
             it.onUpdate(data)
         }
@@ -80,7 +80,6 @@ open class LayoutModule(webView: WebView, name: String) {
             listenerMap[key] = mutableListOf(listener)
         }
     }
-
 
     interface DataListener {
         fun onUpdate(data: JSONObject)
