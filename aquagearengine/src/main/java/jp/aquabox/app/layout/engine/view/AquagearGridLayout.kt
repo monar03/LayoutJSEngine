@@ -43,13 +43,11 @@ class AquagearGridLayout(context: Context) : GridLayout(context), AquagearViewIn
         }
 
         params?.get("for")?.let {
-            when (it.type) {
-                Type.VARIABLE -> {
-                    if (this.context is AquagearEngine.OnEngineInterface) {
-                        (context as AquagearEngine.OnEngineInterface).getEngine().run {
-                            setDataListener(it)
-                            module.update(it.value)
-                        }
+            if (it.type == Type.VARIABLE) {
+                if (context is AquagearEngine.OnEngineInterface) {
+                    (context as AquagearEngine.OnEngineInterface).getEngine().run {
+                        setDataListener(it)
+                        module.update(it.value)
                     }
                 }
             }

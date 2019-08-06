@@ -14,8 +14,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
-class AquagearGridLayoutTest {
-
+class AquagearTextViewTest {
     @Test
     fun `タップできない`() {
         val v = aquagearGridLayout(mock {}, mapOf(), mapOf())
@@ -103,7 +102,7 @@ class AquagearGridLayoutTest {
     @Test
     fun `Marginを設定`() {
         val v = aquagearGridLayout(
-            mock{},
+            mock {},
             mapOf(),
             mapOf("margin" to "2px")
         )
@@ -116,7 +115,7 @@ class AquagearGridLayoutTest {
     @Test
     fun `Paddingを設定`() {
         val v = aquagearGridLayout(
-            mock{},
+            mock {},
             mapOf(),
             mapOf("padding" to "2px")
         )

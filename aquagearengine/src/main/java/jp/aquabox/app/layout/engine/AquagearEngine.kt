@@ -7,7 +7,7 @@ import android.view.View
 import android.webkit.*
 import java.io.IOException
 
-class AquagearEngine(context: Context?, onLoadListener: () -> Unit) {
+class AquagearEngine(context: Context, onLoadListener: (engine: AquagearEngine) -> Unit) {
     private val webView: WebView = WebView(context)
     private val modules: MutableMap<String, LayoutModule> = mutableMapOf()
 
@@ -15,7 +15,7 @@ class AquagearEngine(context: Context?, onLoadListener: () -> Unit) {
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                onLoadListener()
+                onLoadListener(this@AquagearEngine)
             }
         }
         webView.webChromeClient = object : WebChromeClient() {
@@ -72,27 +72,14 @@ class AquagearEngine(context: Context?, onLoadListener: () -> Unit) {
 
     fun loadModule(
         name: String,
-        layoutStr: String,
-        designStr: String,
-        scriptStr: String,
+        data: LayoutModule.LayoutModuleData,
         onLoadListener: (v: View) -> Unit
     ) {
-        val module = LayoutModule(webView, name)
-        module.load(
-            layoutStr,
-            designStr,
-            scriptStr,
-            onLoadListener
-        )
-        modules[name] = module
+        modules[name] = LayoutModuleImpl(webView, name, data, onLoadListener)
     }
 
     fun update(name: String, key: String) {
         modules[name]?.update(key)
-    }
-
-    abstract class OnLoadListener {
-        open fun onReady() {}
     }
 
     interface OnEngineInterface {

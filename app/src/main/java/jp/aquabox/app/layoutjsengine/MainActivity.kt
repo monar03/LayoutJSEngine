@@ -1,34 +1,41 @@
 package jp.aquabox.app.layoutjsengine
 
 import android.os.Bundle
-import jp.aquabox.app.layout.AquagearEngineActivity
+import android.support.v7.app.AppCompatActivity
 import jp.aquabox.app.layout.engine.AquagearEngine
+import jp.aquabox.app.layout.engine.LayoutModule
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.InputStream
 
-class MainActivity : AquagearEngineActivity() {
+class MainActivity : AppCompatActivity(), AquagearEngine.OnEngineInterface {
+    private lateinit var aquagearEngine: AquagearEngine
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-    }
 
-    override fun onReadyEngine(engine: AquagearEngine) {
-        engine.loadModule(
-            "test",
-            getFileString("index/index.vxml"),
-            getFileString("index/index.vcss"),
-            getFileString("index/index.js")
-        ) {
-            root.addView(it)
-        }
+        aquagearEngine = AquagearEngine(this) {
+            it.loadModule(
+                "test",
+                LayoutModule.LayoutModuleData(
+                    getFileString("index/index.vxml"),
+                    getFileString("index/index.vcss"),
+                    getFileString("index/index.js")
+                )
+            ) {
+                root.addView(it)
+            }
 
-        engine.loadModule(
-            "test1",
-            getFileString("index/index.vxml"),
-            getFileString("index/index.vcss"),
-            getFileString("index/index.js")
-        ) {
-            root.addView(it)
+            it.loadModule(
+                "test1",
+                LayoutModule.LayoutModuleData(
+                    getFileString("index/index.vxml"),
+                    getFileString("index/index.vcss"),
+                    getFileString("index/index.js")
+                )
+            ) {
+                root.addView(it)
+            }
         }
     }
 
@@ -41,6 +48,9 @@ class MainActivity : AquagearEngineActivity() {
         return String(buffer, Charsets.UTF_8)
     }
 
+    override fun getEngine(): AquagearEngine {
+        return aquagearEngine
+    }
 }
 
 

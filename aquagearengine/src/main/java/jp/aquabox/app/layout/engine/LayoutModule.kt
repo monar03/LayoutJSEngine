@@ -10,23 +10,40 @@ import jp.aquabox.layout.compiler.render.compiler.Render
 import org.json.JSONObject
 import java.io.StringReader
 
-open class LayoutModule(webView: WebView, name: String) {
-    private val listenerMap: MutableMap<String, MutableList<DataListener>> = mutableMapOf()
-    private val command: AquagearCommand = AquagearCommand(name, webView)
+interface LayoutModule {
+    fun update(key: String)
+    fun tap(funcName: String, jsonStr: String)
+    fun addListener(key: String, listener: DataListener)
 
-    fun load(
-        layoutStr: String,
-        designStr: String,
-        scriptStr: String,
-        onLoadListener: (v: View) -> Unit
-    ) {
+    interface DataListener {
+        fun onUpdate(data: JSONObject)
+    }
 
-        command.load(scriptStr) { context: Context ->
+    data class LayoutModuleData(
+        val layoutStr: String,
+        val designStr: String,
+        val scriptStr: String
+    )
+}
+
+open class LayoutModuleImpl(
+    webView: WebView,
+    name: String,
+    data: LayoutModule.LayoutModuleData,
+    onLoadListener: (v: View) -> Unit
+) : LayoutModule {
+    private val listenerMap: MutableMap<String, MutableList<LayoutModule.DataListener>> = mutableMapOf()
+    private val command: AquagearCommand by lazy {
+        AquagearCommand(name, webView)
+    }
+
+    init {
+        command.load(data.scriptStr) { context: Context ->
             val renders = Compiler(
                 getTagMap()
             ).compile(
-                layoutStr,
-                designStr
+                data.layoutStr,
+                data.designStr
             )
 
             if (renders != null) {
@@ -34,7 +51,7 @@ open class LayoutModule(webView: WebView, name: String) {
                     if (render is AquagearRender) {
                         val o = render.render(
                             context,
-                            this@LayoutModule,
+                            this@LayoutModuleImpl,
                             null
                         )
                         onLoadListener(o)
@@ -44,7 +61,7 @@ open class LayoutModule(webView: WebView, name: String) {
         }
     }
 
-    fun update(key: String) {
+    override fun update(key: String) {
         command.update(key) {
             // XXX 変なエスケープ文字列をサニタイズする
             val reader = JsonReader(StringReader(it))
@@ -53,7 +70,7 @@ open class LayoutModule(webView: WebView, name: String) {
         }
     }
 
-    fun tap(funcName: String, jsonStr: String) {
+    override fun tap(funcName: String, jsonStr: String) {
         command.tap(funcName, jsonStr)
     }
 
@@ -73,15 +90,12 @@ open class LayoutModule(webView: WebView, name: String) {
         }
     }
 
-    fun addListener(key: String, listener: DataListener) {
+    override fun addListener(key: String, listener: LayoutModule.DataListener) {
         if (listenerMap.containsKey(key)) {
             listenerMap[key]?.add(listener)
         } else {
             listenerMap[key] = mutableListOf(listener)
         }
     }
-
-    interface DataListener {
-        fun onUpdate(data: JSONObject)
-    }
 }
+
