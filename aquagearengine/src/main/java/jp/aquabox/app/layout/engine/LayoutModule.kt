@@ -3,7 +3,6 @@ package jp.aquabox.app.layout.engine
 import android.content.Context
 import android.util.JsonReader
 import android.view.View
-import android.webkit.WebView
 import jp.aquabox.app.layout.engine.render.*
 import jp.aquabox.layout.compiler.Compiler
 import jp.aquabox.layout.compiler.render.compiler.Render
@@ -27,15 +26,11 @@ interface LayoutModule {
 }
 
 open class LayoutModuleImpl(
-    webView: WebView,
-    name: String,
+    private val command: AquagearCommand,
     data: LayoutModule.LayoutModuleData,
     onLoadListener: (v: View) -> Unit
 ) : LayoutModule {
     private val listenerMap: MutableMap<String, MutableList<LayoutModule.DataListener>> = mutableMapOf()
-    private val command: AquagearCommand by lazy {
-        AquagearCommand(name, webView)
-    }
 
     init {
         command.load(data.scriptStr) { context: Context ->

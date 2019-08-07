@@ -75,7 +75,11 @@ class AquagearEngine(context: Context, onLoadListener: (engine: AquagearEngine) 
         data: LayoutModule.LayoutModuleData,
         onLoadListener: (v: View) -> Unit
     ) {
-        modules[name] = LayoutModuleImpl(webView, name, data, onLoadListener)
+        modules[name] = LayoutModuleImpl(
+            AquagearCommandImpl(name, webView),
+            data,
+            onLoadListener
+        )
     }
 
     fun update(name: String, key: String) {
