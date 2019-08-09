@@ -4,9 +4,6 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import jp.aquabox.app.layout.engine.view.AquagearLayout
-import org.hamcrest.core.IsInstanceOf
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
@@ -18,9 +15,11 @@ class LayoutModuleTest {
     @Test
     fun `入力に合わせてAquagearViewが生成される`() {
         val command: AquagearCommand = mock {}
+
         createLayoutModule(command) {
-            Assert.assertThat(it, IsInstanceOf.instanceOf(AquagearLayout::class.java))
         }
+
+        verify(command).load(any(), any())
     }
 
     @Test

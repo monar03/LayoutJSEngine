@@ -1,6 +1,5 @@
 package jp.aquabox.app.layout.engine
 
-import android.content.Context
 import android.webkit.WebView
 
 interface AquagearCommand {
