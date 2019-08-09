@@ -1,6 +1,5 @@
 package jp.aquabox.app.layout.engine
 
-import android.view.View
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
@@ -25,13 +24,13 @@ class LayoutModuleTest {
     }
 
     @Test
-    fun `データのアップデートを行うことができる`() {
+    fun `LayoutModuleのupdateメソッドが呼ばれた時にAquagearCommandのupdateが呼ばれる`() {
         val command: AquagearCommand = mock {}
         createLayoutModule(command) { }.update("test")
         verify(command).update(eq("test"), any())
     }
 
-    private fun createLayoutModule(command: AquagearCommand, onLoad: (View) -> Unit): LayoutModule {
+    private fun createLayoutModule(command: AquagearCommand, onLoad: (LayoutModule) -> Unit): LayoutModule {
         val data = LayoutModule.LayoutModuleData(
             "<view class=\"box\">\n" +
                     "   <text class=\"text\" tap=\"tap\">{{text1}}</text>\n" +
@@ -63,17 +62,5 @@ class LayoutModuleTest {
             data,
             onLoad
         )
-    }
-
-    @Test
-    fun tap() {
-    }
-
-    @Test
-    fun getTagMap() {
-    }
-
-    @Test
-    fun addListener() {
     }
 }

@@ -1,11 +1,6 @@
 package jp.aquabox.app.layout.engine
 
-import android.content.Context
 import android.util.JsonReader
-import android.view.View
-import jp.aquabox.app.layout.engine.render.*
-import jp.aquabox.layout.compiler.Compiler
-import jp.aquabox.layout.compiler.render.compiler.Render
 import org.json.JSONObject
 import java.io.StringReader
 
@@ -28,31 +23,13 @@ interface LayoutModule {
 open class LayoutModuleImpl(
     private val command: AquagearCommand,
     data: LayoutModule.LayoutModuleData,
-    onLoadListener: (v: View) -> Unit
+    onLoadEndListener: (LayoutModule) -> Unit
 ) : LayoutModule {
     private val listenerMap: MutableMap<String, MutableList<LayoutModule.DataListener>> = mutableMapOf()
 
     init {
-        command.load(data.scriptStr) { context: Context ->
-            val renders = Compiler(
-                getTagMap()
-            ).compile(
-                data.layoutStr,
-                data.designStr
-            )
-
-            if (renders != null) {
-                for (render: Render in renders) {
-                    if (render is AquagearRender) {
-                        val o = render.render(
-                            context,
-                            this@LayoutModuleImpl,
-                            null
-                        )
-                        onLoadListener(o)
-                    }
-                }
-            }
+        command.load(data.scriptStr) {
+            onLoadEndListener(this)
         }
     }
 
@@ -67,16 +44,6 @@ open class LayoutModuleImpl(
 
     override fun tap(funcName: String, jsonStr: String) {
         command.tap(funcName, jsonStr)
-    }
-
-    open fun getTagMap(): Map<String, Class<out AquagearRender>> {
-        return mapOf(
-            "view" to ViewRender::class.java,
-            "text" to TextRender::class.java,
-            "scroll-view" to ScrollViewRender::class.java,
-            "image" to ImageRender::class.java,
-            "grid" to GridRender::class.java
-        )
     }
 
     private fun refresh(key: String, data: JSONObject) {

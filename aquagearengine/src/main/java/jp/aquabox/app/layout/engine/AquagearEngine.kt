@@ -5,9 +5,17 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import android.webkit.*
+import jp.aquabox.app.layout.engine.render.AquagearRender
+import jp.aquabox.layout.compiler.Compiler
+import jp.aquabox.layout.compiler.render.RenderCreator
+import jp.aquabox.layout.compiler.render.compiler.Render
 import java.io.IOException
 
-class AquagearEngine(context: Context, onLoadListener: (engine: AquagearEngine) -> Unit) {
+open class AquagearEngine(
+    context: Context,
+    private val creator: RenderCreator,
+    onLoadListener: (engine: AquagearEngine) -> Unit
+) {
     private val webView: WebView = WebView(context)
     private val modules: MutableMap<String, LayoutModule> = mutableMapOf()
 
@@ -73,13 +81,33 @@ class AquagearEngine(context: Context, onLoadListener: (engine: AquagearEngine) 
     fun loadModule(
         name: String,
         data: LayoutModule.LayoutModuleData,
-        onLoadListener: (v: View) -> Unit
+        onLoadEndListener: (View) -> Unit
     ) {
-        modules[name] = LayoutModuleImpl(
+        val module = LayoutModuleImpl(
             AquagearCommandImpl(name, webView),
-            data,
-            onLoadListener
-        )
+            data
+        ) {
+            val renders = Compiler(
+                creator
+            ).compile(
+                data.layoutStr,
+                data.designStr
+            )
+
+            if (renders != null) {
+                for (render: Render in renders) {
+                    if (render is AquagearRender) {
+                        val o = render.render(
+                            webView.context,
+                            it,
+                            null
+                        )
+                        onLoadEndListener(o)
+                    }
+                }
+            }
+        }
+        modules[name] = module
     }
 
     fun update(name: String, key: String) {
