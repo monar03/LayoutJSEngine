@@ -17,14 +17,14 @@ import org.robolectric.RuntimeEnvironment
 class AquagearLayoutTest {
     @Test
     fun `タップできない`() {
-        val v = aquagearGridLayout(mock {}, mapOf(), mapOf())
+        val v = aquagearLayout(mock {}, mapOf(), mapOf())
         Assert.assertThat(v.performClick(), Is.`is`(false))
     }
 
     @Test
     fun `タップできる`() {
         val module: LayoutModule = mock {}
-        val v = aquagearGridLayout(
+        val v = aquagearLayout(
             module,
             mapOf("tap" to StringVariable.variableParse("test")),
             mapOf()
@@ -36,7 +36,7 @@ class AquagearLayoutTest {
     @Test
     fun `Widthをpxで設定できる`() {
         val module: LayoutModule = mock {}
-        val v = aquagearGridLayout(
+        val v = aquagearLayout(
             module,
             mapOf(),
             mapOf("width" to "100px")
@@ -47,7 +47,7 @@ class AquagearLayoutTest {
     @Test
     fun `WidthをMATCH_PARENTを設定できる`() {
         val module: LayoutModule = mock {}
-        val v = aquagearGridLayout(
+        val v = aquagearLayout(
             module,
             mapOf(),
             mapOf("width" to "fill")
@@ -58,7 +58,7 @@ class AquagearLayoutTest {
     @Test
     fun `WidthをWRAP_CONTENTを設定できる`() {
         val module: LayoutModule = mock {}
-        val v = aquagearGridLayout(
+        val v = aquagearLayout(
             module,
             mapOf(),
             mapOf("width" to "wrap")
@@ -69,7 +69,7 @@ class AquagearLayoutTest {
     @Test
     fun `Heightをpxで設定できる`() {
         val module: LayoutModule = mock {}
-        val v = aquagearGridLayout(
+        val v = aquagearLayout(
             module,
             mapOf(),
             mapOf("height" to "100px")
@@ -80,7 +80,7 @@ class AquagearLayoutTest {
     @Test
     fun `HeigheをMATCH_PARENTを設定できる`() {
         val module: LayoutModule = mock {}
-        val v = aquagearGridLayout(
+        val v = aquagearLayout(
             module,
             mapOf(),
             mapOf("height" to "fill")
@@ -91,7 +91,7 @@ class AquagearLayoutTest {
     @Test
     fun `HeigheをWRAP_CONTENTを設定できる`() {
         val module: LayoutModule = mock {}
-        val v = aquagearGridLayout(
+        val v = aquagearLayout(
             module,
             mapOf(),
             mapOf("height" to "wrap")
@@ -101,7 +101,7 @@ class AquagearLayoutTest {
 
     @Test
     fun `Marginを設定`() {
-        val v = aquagearGridLayout(
+        val v = aquagearLayout(
             mock {},
             mapOf(),
             mapOf("margin" to "2px")
@@ -114,7 +114,7 @@ class AquagearLayoutTest {
 
     @Test
     fun `Paddingを設定`() {
-        val v = aquagearGridLayout(
+        val v = aquagearLayout(
             mock {},
             mapOf(),
             mapOf("padding" to "2px")
@@ -125,12 +125,12 @@ class AquagearLayoutTest {
         Assert.assertThat(v.paddingBottom, Is.`is`(2))
     }
 
-    private fun aquagearGridLayout(
+    private fun aquagearLayout(
         module: LayoutModule,
         params: Map<String, StringVariable.Parameter>,
         styles: Map<String, String>
-    ): AquagearGridLayout {
-        return AquagearGridLayout(RuntimeEnvironment.application).apply {
+    ): AquagearLayout {
+        return AquagearLayout(RuntimeEnvironment.application).apply {
             set(
                 module,
                 params,
