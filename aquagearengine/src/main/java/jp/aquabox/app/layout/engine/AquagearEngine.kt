@@ -2,10 +2,11 @@ package jp.aquabox.app.layout.engine
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import android.util.Log
 import android.view.View
 import android.webkit.*
-import jp.aquabox.app.layout.engine.render.AquagearRender
+import jp.aquabox.app.layout.engine.render.*
 import jp.aquabox.layout.compiler.Compiler
 import jp.aquabox.layout.compiler.render.RenderCreator
 import jp.aquabox.layout.compiler.render.compiler.Render
@@ -17,7 +18,9 @@ open class AquagearEngine(
     onLoadListener: (engine: AquagearEngine) -> Unit
 ) {
     private val webView: WebView = WebView(context)
-    private val modules: MutableMap<String, LayoutModule> = mutableMapOf()
+
+    @VisibleForTesting
+    val modules: MutableMap<String, LayoutModule> = mutableMapOf()
 
     init {
         webView.webViewClient = object : WebViewClient() {
@@ -55,7 +58,8 @@ open class AquagearEngine(
 
             val html = "<html>\n" +
                     "<head>\n" +
-                    "    <script src=\"file:///android_asset/Module.js\">\n" +
+                    "    <script>\n" +
+                    String(buffer) +
                     "    </script>\n" +
                     "</head>\n" +
                     "</html>"
@@ -74,7 +78,7 @@ open class AquagearEngine(
     }
 
     @SuppressLint("JavascriptInterface")
-    fun addJSInterface(jsInterface: AquagearEngineInterface, key: String) {
+    private fun addJSInterface(jsInterface: AquagearEngineInterface, key: String) {
         webView.addJavascriptInterface(jsInterface, key)
     }
 
@@ -116,6 +120,19 @@ open class AquagearEngine(
 
     interface OnEngineInterface {
         fun getEngine(): AquagearEngine
+    }
+
+    class AquagearEngineRenderCreator : RenderCreator() {
+        override fun create(tagStr: String?): Render {
+            when (tagStr) {
+                "text" -> return TextRender()
+                "scroll-view" -> return ScrollViewRender()
+                "image" -> return ImageRender()
+                "grid" -> return GridRender()
+            }
+
+            return ViewRender()
+        }
     }
 }
 

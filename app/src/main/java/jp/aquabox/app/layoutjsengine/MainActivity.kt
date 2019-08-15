@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity(), AquagearEngine.OnEngineInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        aquagearEngine = AquagearEngine(this) {
+        aquagearEngine = AquagearEngine(this, AquagearEngine.AquagearEngineRenderCreator()) {
             it.loadModule(
                 "test",
                 LayoutModule.LayoutModuleData(
