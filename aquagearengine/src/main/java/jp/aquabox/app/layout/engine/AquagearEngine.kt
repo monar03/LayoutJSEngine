@@ -17,7 +17,8 @@ open class AquagearEngine(
     private val creator: RenderCreator,
     onLoadListener: (engine: AquagearEngine) -> Unit
 ) {
-    private val webView: WebView = WebView(context)
+    @VisibleForTesting
+    val webView: WebView = WebView(context)
 
     @VisibleForTesting
     val modules: MutableMap<String, LayoutModule> = mutableMapOf()
