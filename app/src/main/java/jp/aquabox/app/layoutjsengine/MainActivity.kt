@@ -42,6 +42,16 @@ class MainActivity : AppCompatActivity(), AquagearEngine.OnEngineInterface {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        aquagearEngine.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        aquagearEngine.onPause()
+    }
+
     private fun getFileString(path: String): String {
         val input: InputStream = assets.open(path)
         val buffer = ByteArray(input.available())

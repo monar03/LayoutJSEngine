@@ -49,6 +49,17 @@ open class AquagearEngine(
         loadEngine()
     }
 
+    fun onResume() {
+        webView?.run {
+            resumeTimers()
+        }
+    }
+
+    fun onPause() {
+        webView?.run {
+            pauseTimers()
+        }
+    }
 
     private fun loadEngine() {
         try {
