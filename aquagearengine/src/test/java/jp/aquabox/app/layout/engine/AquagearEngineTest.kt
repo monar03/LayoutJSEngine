@@ -24,7 +24,7 @@ class AquagearEngineTest {
     fun `AquagearEngineでモジュールをロードする`() {
         val engine = AquagearEngine(
             RuntimeEnvironment.application,
-            AquagearEngine.AquagearEngineRenderCreator()
+            AquagearModules()
         ) {
             it.loadModule(
                 "test",

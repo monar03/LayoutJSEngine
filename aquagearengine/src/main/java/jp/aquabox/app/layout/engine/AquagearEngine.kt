@@ -6,15 +6,14 @@ import android.support.annotation.VisibleForTesting
 import android.util.Log
 import android.view.View
 import android.webkit.*
-import jp.aquabox.app.layout.engine.render.*
+import jp.aquabox.app.layout.engine.render.AquagearRender
 import jp.aquabox.layout.compiler.Compiler
-import jp.aquabox.layout.compiler.render.RenderCreator
 import jp.aquabox.layout.compiler.render.compiler.Render
 import java.io.IOException
 
 open class AquagearEngine(
     context: Context,
-    private val creator: RenderCreator,
+    private val creator: AquagearModules,
     onLoadListener: (engine: AquagearEngine) -> Unit
 ) {
     @VisibleForTesting
@@ -45,7 +44,7 @@ open class AquagearEngine(
             this.javaScriptEnabled = true
         }
 
-        addJSInterface(JsInterface(this), "aquagear")
+        addJSInterface(creator.createEngineInterface(this), "aquagear")
         loadEngine()
     }
 
@@ -100,11 +99,11 @@ open class AquagearEngine(
         onLoadEndListener: (View) -> Unit
     ) {
         val module = LayoutModuleImpl(
-            AquagearCommandImpl(name, webView),
+            creator.createCommand(name, webView),
             data
         ) {
             val renders = Compiler(
-                creator
+                creator.createRenderCreator()
             ).compile(
                 data.layoutStr,
                 data.designStr
@@ -132,19 +131,6 @@ open class AquagearEngine(
 
     interface OnEngineInterface {
         fun getEngine(): AquagearEngine
-    }
-
-    class AquagearEngineRenderCreator : RenderCreator() {
-        override fun create(tagStr: String?): Render {
-            when (tagStr) {
-                "text" -> return TextRender()
-                "scroll-view" -> return ScrollViewRender()
-                "image" -> return ImageRender()
-                "grid" -> return GridRender()
-            }
-
-            return ViewRender()
-        }
     }
 }
 
